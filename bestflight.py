@@ -92,3 +92,4 @@ g.djikstra(0)
 ####################
 
 gmaps = googlemaps.Client(key='AIzaSyAKeF3vJdrKjN7YHsDKAfrOFjP5wLxaSo8')
+print("hallo")
