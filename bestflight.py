@@ -172,8 +172,6 @@ g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
            [0, 0, 2, 0, 0, 0, 6, 7, 0]
           ]"""
 #g.djikstra(0)
-for x in g:
-    print(x)
 ####################
 
 gmaps = googlemaps.Client(key='AIzaSyAKeF3vJdrKjN7YHsDKAfrOFjP5wLxaSo8')
