@@ -95,10 +95,37 @@ def search(pat, txt, q):
 
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'OWIMPYbRvRbxNupsoiWe')
 geolocator = Nominatim(user_agent = "wia2005")
+"""
 location = geolocator.geocode("Raub Pahang")
 location2 = geolocator.geocode("Kuala Lumpur")
 coordinates = (location.latitude, location.longitude)
 coordinates2 = (location2.latitude, location.longitude)
+"""
+kul = geolocator.geocode("kuala lumpur malaysia")
+nz = geolocator.geocode("new zealand")
+jpn = geolocator.geocode("japan")
+aus = geolocator.geocode("australia")
+thai = geolocator.geocode("thailand")
+usa = geolocator.geocode("united states")
+uk = geolocator.geocode("united kingdom")
+ger = geolocator.geocode("germany")
+braz = geolocator.geocode("brazil")
+haw = geolocator.geocode("hawaii")
+hk = geolocator.geocode("hong kong")
+sgp = geolocator.geocode("singapore")
+kulcoordinate = (kul.latitude, kul.longitude)
+nzcoordinate = (nz.latitude, nz.longitude)
+jpncoordinate = (jpn.latitude, jpn.longitude)
+auscoordinate = (aus.latitude, aus.longitude)
+thaicoordinate = (thai.latitude, thai.longitude)
+usacoordinate = (usa.latitude, usa.longitude)
+ukcoordinate = (uk.latitude, uk.longitude)
+gercoordinate = (ger.latitude, ger.longitude)
+brazcoordinate = (braz.latitude, braz.longitude)
+hawcoordinate = (haw.latitude, haw.longitude)
+hkcoordinate = (hk.latitude, hk.longitude)
+sgpcoordinate = (sgp.latitude, sgp.longitude)
+
 
 print(location.address)
 print((location.latitude, location.longitude))
@@ -118,7 +145,22 @@ data = [trace0, trace1]
 
 py.plot(data, filename = 'basic-line', auto_open=True)
 
-g = Graph(9)
+g = Graph(11)
+g.graph = [[0, 0, 0, 0, geodesic(kulcoordinate, thaicoordinate).miles, 0, 0, 0, 0,0,geodesic(kulcoordinate, hkcoordinate).miles, geodesic(kulcoordinate, thaicoordinate).miles],
+           [0, 0, geodesic(nzcoordinate, jpncoordinate).miles, 0, geodesic(nzcoordinate, thaicoordinate).miles, geodesic(nzcoordinate, usacoordinate).miles, 0, 0, 0,0,geodesic(nzcoordinate, hkcoordinate).miles, geodesic(nzcoordinate, sgpcoordinate).miles],
+           [0, geodesic(nzcoordinate, jpncoordinate).miles, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, geodesic(auscoordinate, jpncoordinate).miles, 0, 0, geodesic(auscoordinate, usacoordinate).miles, 0, 0, 0],
+           [geodesic(kulcoordinate, thaicoordinate).miles, geodesic(nzcoordinate, thaicoordinate).miles, 0, 0, 0, 0, 0, geodesic(gercoordinate, thaicoordinate).miles, 0,geodesic(hawcoordinate, thaicoordinate).miles,0,0],
+           [0, geodesic(nzcoordinate, usacoordinate).miles, 0, geodesic(usacoordinate, auscoordinate).miles, 0, 0, geodesic(usacoordinate, ukcoordinate).miles, geodesic(usacoordinate, gercoordinate).miles,geodesic(usacoordinate, brazcoordinate).miles,geodesic(usacoordinate, hawcoordinate).miles,0,0],
+           [0, 0, geodesic(ukcoordinate, jpncoordinate).miles, 0, 0, geodesic(ukcoordinate, usacoordinate).miles, 0, 0, 0,0,0,0],
+           [0, 0, geodesic(gercoordinate, jpncoordinate).miles, 0, geodesic(gercoordinate, thaicoordinate).miles, geodesic(gercoordinate, usacoordinate).miles, 0, 0, 0,0,geodesic(gercoordinate, hkcoordinate).miles,geodesic(gercoordinate, sgpcoordinate).miles],
+           [0, 0, geodesic(brazcoordinate, jpncoordinate).miles, 0, 0, geodesic(brazcoordinate, usacoordinate).miles, 0, 0, 0,0,0,0],
+           [0, 0, geodesic(hawcoordinate, jpncoordinate).miles, 0, geodesic(hawcoordinate, thaicoordinate).miles, geodesic(hawcoordinate, usacoordinate).miles, 0, 0, 0,0,geodesic(hawcoordinate, hkcoordinate).miles,geodesic(hawcoordinate, sgpcoordinate).miles],
+           [geodesic(kulcoordinate, hkcoordinate).miles, geodesic(nzcoordinate, hkcoordinate).miles, 0, 0, 0, 0, 0, geodesic(gercoordinate, hkcoordinate).miles, 0,geodesic(hawcoordinate, hkcoordinate).miles,0,0],
+           [geodesic(kulcoordinate, sgpcoordinate).miles, geodesic(nzcoordinate, sgpcoordinate).miles, 0, 0, 0, 0, 0, geodesic(gercoordinate, sgpcoordinate).miles, 0,geodesic(gercoordinate, hawcoordinate).miles,0,0],
+          ]
+
+"""g = Graph(9)
 g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
            [4, 0, 8, 0, 0, 0, 0, 11, 0],
            [0, 8, 0, 7, 0, 4, 0, 0, 2],
@@ -128,10 +170,10 @@ g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
            [0, 0, 0, 0, 0, 2, 0, 1, 6],
            [8, 11, 0, 0, 0, 0, 1, 0, 7],
            [0, 0, 2, 0, 0, 0, 6, 7, 0]
-          ]
-
-g.djikstra(0)
-
+          ]"""
+#g.djikstra(0)
+for x in g:
+    print(x)
 ####################
 
 gmaps = googlemaps.Client(key='AIzaSyAKeF3vJdrKjN7YHsDKAfrOFjP5wLxaSo8')
