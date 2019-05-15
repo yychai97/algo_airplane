@@ -1,5 +1,5 @@
 from _ast import keyword
-
+from collections import deque, namedtuple
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
@@ -12,41 +12,92 @@ from datetime import datetime
 
 
 ##Djisktra ALgo for calc
-class Graph():
+# we'll use infinity as a default distance to nodes.
+inf = float('inf')
+Edge = namedtuple('Edge', 'start, end, cost')
 
-    def __init__(self, vertices):
-        self.V = vertices
-        self.graph = [[0 for column in range(vertices)] for row in range(vertices)]
 
-    def printSolution(self, dist):
-        print("Vertex tDistance from Source")
-        for node in range(self.V):
-            print(node, "t", dist[node])
+def make_edge(start, end, cost=1):
+  return Edge(start, end, cost)
 
-    def minDistance(self, dist, sptSet):
-        min = sys.maxsize
 
-        for v in range(self.V):
-            if dist[v] < min and sptSet[v] == False:
-                min = dist[v]
-                min_index = v
+class Graph:
+    def __init__(self, edges):
+        # let's check that the data is right
+        wrong_edges = [i for i in edges if len(i) not in [2, 3]]
+        if wrong_edges:
+            raise ValueError('Wrong edges data: {}'.format(wrong_edges))
 
-        return min_index
+        self.edges = [make_edge(*edge) for edge in edges]
 
-    def djikstra(self, src):
+    @property
+    def vertices(self):
+        return set(
+            sum(
+                ([edge.start, edge.end] for edge in self.edges), []
+            )
+        )
 
-        dist = [sys.maxsize] * self.V
-        dist[src] = 0
-        sptSet = [False] * (self.V)
+    def get_node_pairs(self, n1, n2, both_ends=True):
+        if both_ends:
+            node_pairs = [[n1, n2], [n2, n1]]
+        else:
+            node_pairs = [[n1, n2]]
+        return node_pairs
 
-        for cout in range(self.V):
-            u = self.minDistance(dist, sptSet)
-            sptSet[u] = True
+    def remove_edge(self, n1, n2, both_ends=True):
+        node_pairs = self.get_node_pairs(n1, n2, both_ends)
+        edges = self.edges[:]
+        for edge in edges:
+            if [edge.start, edge.end] in node_pairs:
+                self.edges.remove(edge)
 
-            for v in range(self.V):
-                if self.graph[u][v] > 0 and sptSet[v] == False and dist[v] > dist[u] + self.graph[u][v]:
-                    dist[v] = dist[u] + self.graph[u][v]
-        self.printSolution(dist)
+    def add_edge(self, n1, n2, cost=1, both_ends=True):
+        node_pairs = self.get_node_pairs(n1, n2, both_ends)
+        for edge in self.edges:
+            if [edge.start, edge.end] in node_pairs:
+                return ValueError('Edge {} {} already exists'.format(n1, n2))
+
+        self.edges.append(Edge(start=n1, end=n2, cost=cost))
+        if both_ends:
+            self.edges.append(Edge(start=n2, end=n1, cost=cost))
+
+    @property
+    def neighbours(self):
+        neighbours = {vertex: set() for vertex in self.vertices}
+        for edge in self.edges:
+            neighbours[edge.start].add((edge.end, edge.cost))
+
+        return neighbours
+
+    def dijkstra(self, source, dest):
+        assert source in self.vertices, 'Such source node doesn\'t exist'
+        distances = {vertex: inf for vertex in self.vertices}
+        previous_vertices = {
+            vertex: None for vertex in self.vertices
+        }
+        distances[source] = 0
+        vertices = self.vertices.copy()
+
+        while vertices:
+            current_vertex = min(
+                vertices, key=lambda vertex: distances[vertex])
+            vertices.remove(current_vertex)
+            if distances[current_vertex] == inf:
+                break
+            for neighbour, cost in self.neighbours[current_vertex]:
+                alternative_route = distances[current_vertex] + cost
+                if alternative_route < distances[neighbour]:
+                    distances[neighbour] = alternative_route
+                    previous_vertices[neighbour] = current_vertex
+
+        path, current_vertex = deque(), dest
+        while previous_vertices[current_vertex] is not None:
+            path.appendleft(current_vertex)
+            current_vertex = previous_vertices[current_vertex]
+        if path:
+            path.appendleft(current_vertex)
+        return path
 
 ##rabin-karp algo
 d = 256
@@ -95,12 +146,7 @@ def search(pat, txt, q):
 
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'OWIMPYbRvRbxNupsoiWe')
 geolocator = Nominatim(user_agent = "wia2005")
-"""
-location = geolocator.geocode("Raub Pahang")
-location2 = geolocator.geocode("Kuala Lumpur")
-coordinates = (location.latitude, location.longitude)
-coordinates2 = (location2.latitude, location.longitude)
-"""
+
 kul = geolocator.geocode("kuala lumpur malaysia")
 nz = geolocator.geocode("new zealand")
 jpn = geolocator.geocode("japan")
@@ -126,13 +172,6 @@ hawcoordinate = (haw.latitude, haw.longitude)
 hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
 
-
-print(location.address)
-print((location.latitude, location.longitude))
-print(location2.address)
-print((location2.latitude, location2.longitude))
-print(geodesic(coordinates, coordinates2).kilometers)
-
 trace0 = go.Scatter(
     x=[1, 2, 3, 4],
     y=[10, 15, 13, 17]
@@ -145,33 +184,33 @@ data = [trace0, trace1]
 
 py.plot(data, filename = 'basic-line', auto_open=True)
 
-g = Graph(11)
-g.graph = [[0, 0, 0, 0, geodesic(kulcoordinate, thaicoordinate).miles, 0, 0, 0, 0,0,geodesic(kulcoordinate, hkcoordinate).miles, geodesic(kulcoordinate, thaicoordinate).miles],
-           [0, 0, geodesic(nzcoordinate, jpncoordinate).miles, 0, geodesic(nzcoordinate, thaicoordinate).miles, geodesic(nzcoordinate, usacoordinate).miles, 0, 0, 0,0,geodesic(nzcoordinate, hkcoordinate).miles, geodesic(nzcoordinate, sgpcoordinate).miles],
-           [0, geodesic(nzcoordinate, jpncoordinate).miles, 0, 0, 0, 0, 0, 0, 0],
-           [0, 0, geodesic(auscoordinate, jpncoordinate).miles, 0, 0, geodesic(auscoordinate, usacoordinate).miles, 0, 0, 0],
-           [geodesic(kulcoordinate, thaicoordinate).miles, geodesic(nzcoordinate, thaicoordinate).miles, 0, 0, 0, 0, 0, geodesic(gercoordinate, thaicoordinate).miles, 0,geodesic(hawcoordinate, thaicoordinate).miles,0,0],
-           [0, geodesic(nzcoordinate, usacoordinate).miles, 0, geodesic(usacoordinate, auscoordinate).miles, 0, 0, geodesic(usacoordinate, ukcoordinate).miles, geodesic(usacoordinate, gercoordinate).miles,geodesic(usacoordinate, brazcoordinate).miles,geodesic(usacoordinate, hawcoordinate).miles,0,0],
-           [0, 0, geodesic(ukcoordinate, jpncoordinate).miles, 0, 0, geodesic(ukcoordinate, usacoordinate).miles, 0, 0, 0,0,0,0],
-           [0, 0, geodesic(gercoordinate, jpncoordinate).miles, 0, geodesic(gercoordinate, thaicoordinate).miles, geodesic(gercoordinate, usacoordinate).miles, 0, 0, 0,0,geodesic(gercoordinate, hkcoordinate).miles,geodesic(gercoordinate, sgpcoordinate).miles],
-           [0, 0, geodesic(brazcoordinate, jpncoordinate).miles, 0, 0, geodesic(brazcoordinate, usacoordinate).miles, 0, 0, 0,0,0,0],
-           [0, 0, geodesic(hawcoordinate, jpncoordinate).miles, 0, geodesic(hawcoordinate, thaicoordinate).miles, geodesic(hawcoordinate, usacoordinate).miles, 0, 0, 0,0,geodesic(hawcoordinate, hkcoordinate).miles,geodesic(hawcoordinate, sgpcoordinate).miles],
-           [geodesic(kulcoordinate, hkcoordinate).miles, geodesic(nzcoordinate, hkcoordinate).miles, 0, 0, 0, 0, 0, geodesic(gercoordinate, hkcoordinate).miles, 0,geodesic(hawcoordinate, hkcoordinate).miles,0,0],
-           [geodesic(kulcoordinate, sgpcoordinate).miles, geodesic(nzcoordinate, sgpcoordinate).miles, 0, 0, 0, 0, 0, geodesic(gercoordinate, sgpcoordinate).miles, 0,geodesic(gercoordinate, hawcoordinate).miles,0,0],
-          ]
+graph = Graph([
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
+    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
+    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers),
+    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers),
+    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers),
+    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers),
+    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers),
+    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers),
+    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers),
+    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers),
+    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers),
+    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers),
+    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers),
+    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers),
+    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers),
+    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers),
+    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers),
+    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers),
+    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers),
+    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers),
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)])
 
-"""g = Graph(9)
-g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
-           [4, 0, 8, 0, 0, 0, 0, 11, 0],
-           [0, 8, 0, 7, 0, 4, 0, 0, 2],
-           [0, 0, 7, 0, 9, 14, 0, 0, 0],
-           [0, 0, 0, 9, 0, 10, 0, 0, 0],
-           [0, 0, 4, 14, 10, 0, 2, 0, 0],
-           [0, 0, 0, 0, 0, 2, 0, 1, 6],
-           [8, 11, 0, 0, 0, 0, 1, 0, 7],
-           [0, 0, 2, 0, 0, 0, 6, 7, 0]
-          ]"""
-#g.djikstra(0)
+print(graph.dijkstra("kul", "aus"))
 ####################
 
 gmaps = googlemaps.Client(key='AIzaSyAKeF3vJdrKjN7YHsDKAfrOFjP5wLxaSo8')
