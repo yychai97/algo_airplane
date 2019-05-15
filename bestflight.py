@@ -8,6 +8,7 @@ import plotly.graph_objs as go
 import sys
 import polyline
 import googlemaps
+import requests
 from datetime import datetime
 
 
@@ -84,6 +85,7 @@ def search(pat, txt, q):
                 print
                 "Pattern found at index " + str(i)
 
+
         if i < N - M:
             t = (d * (t - ord(txt[i]) * h) + ord(txt[i + M])) % q
 
@@ -131,6 +133,7 @@ g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
           ]
 
 g.djikstra(0)
+
 
 ####################
 
