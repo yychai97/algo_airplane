@@ -100,7 +100,7 @@ class Graph:
         return path
 
 ########################################################################################################################
-##rabin-karp algo
+##RABIN-KARP ALGORITHM
 d = 256
 
 # pat  -> pattern
@@ -141,6 +141,41 @@ def search(pat, txt, q):
 
             if t < 0:
                 t = t + q
+
+########################################################################################################################
+#CHECK FOR POSITIVE AND NEGATIVE WORDS
+
+def wordfrequency_positive(input):
+    positive_words = open("positive_words.txt", "r")
+    sample_positive = positive_words.read().lower().split();
+    frequency_positive = {}
+    for i in input:
+        if (i in sample_positive):
+            frequency_positive[i] += 1
+        else:
+            frequency_positive[i] = 1
+
+def wordfrequency_negative(input):
+    negative_words = open("negative_words.txt", "r")
+    frequency_negative = {}
+    for i in input:
+        if (i in negative_words):
+            frequency_negative[i] += 1
+        else:
+            frequency_negative[i] = 1
+
+
+
+## file_object = open("input.txt", "r")
+## word = file_object.read().lower().split()
+
+
+
+for words in positive_words:
+    words = words.strip().lower()
+    arr = words.split(" ");
+    for
+
 
 
 ########################################################################################################################
@@ -226,13 +261,7 @@ print("hallo")
 
 ##
 
-positive_words = open("positive_words.txt", "r")
-negative_words = open("negative_words.txt", "r")
 
-for words in positive_words:
-    words = words.strip().lower()
-    arr = words.split(" ");
-    for
 txt = "GEEKS FOR GEEKS"
 pat = "GEEK"
 q = 101  # A prime number
