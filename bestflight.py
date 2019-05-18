@@ -99,6 +99,7 @@ class Graph:
             path.appendleft(current_vertex)
         return path
 
+########################################################################################################################
 ##rabin-karp algo
 d = 256
 
@@ -142,7 +143,7 @@ def search(pat, txt, q):
                 t = t + q
 
 
-##---------------------------------------------------------------------------------------------------------##
+########################################################################################################################
 
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'OWIMPYbRvRbxNupsoiWe')
 geolocator = Nominatim(user_agent = "wia2005")
@@ -171,18 +172,8 @@ brazcoordinate = (braz.latitude, braz.longitude)
 hawcoordinate = (haw.latitude, haw.longitude)
 hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
-
-trace0 = go.Scatter(
-    x=[1, 2, 3, 4],
-    y=[10, 15, 13, 17]
-)
-trace1 = go.Scatter(
-    x=[1, 2, 3, 4],
-    y=[16, 5, 11, 9]
-)
-data = [trace0, trace1]
-
-py.plot(data, filename = 'basic-line', auto_open=True)
+coordinateset = [kulcoordinate, nzcoordinate, jpncoordinate, auscoordinate, thaicoordinate, usacoordinate, ukcoordinate, gercoordinate
+                 , brazcoordinate, hawcoordinate, hkcoordinate, sgpcoordinate]
 
 graph = Graph([
     ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
@@ -218,12 +209,30 @@ graph = Graph([
     ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)])
 
 print(graph.dijkstra("kul", "aus"))
-####################
+########################################################################################################################
+
+trace0 = go.Scatter(x = [coordinateset.], y = coordinateset.__contains__('longitude'))
+#trace1 = go.Scatter(
+ #   x=[1, 2, 3, 4],
+  #  y=[16, 5, 11, 9]
+#)
+data = [trace0]
+py.plot(data, filename = 'basic-line', auto_open=True)
+
+########################################################################################################################
 
 gmaps = googlemaps.Client(key='AIzaSyAKeF3vJdrKjN7YHsDKAfrOFjP5wLxaSo8')
 print("hallo")
 
 ##
+
+positive_words = open("positive_words.txt", "r")
+negative_words = open("negative_words.txt", "r")
+
+for words in positive_words:
+    words = words.strip().lower()
+    arr = words.split(" ");
+    for
 txt = "GEEKS FOR GEEKS"
 pat = "GEEK"
 q = 101  # A prime number
