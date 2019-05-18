@@ -164,20 +164,6 @@ def wordfrequency_negative(input):
         else:
             frequency_negative[i] = 1
 
-
-
-## file_object = open("input.txt", "r")
-## word = file_object.read().lower().split()
-
-
-
-for words in positive_words:
-    words = words.strip().lower()
-    arr = words.split(" ");
-    for
-
-
-
 ########################################################################################################################
 
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'OWIMPYbRvRbxNupsoiWe')
