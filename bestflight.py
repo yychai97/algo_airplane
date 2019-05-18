@@ -1,5 +1,5 @@
 from _ast import keyword
-from collections import deque, namedtuple
+from collections import deque, namedtuple, Counter
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
@@ -100,7 +100,7 @@ class Graph:
         return path
       
 ##count-text-frequency
-from collections import Counter
+
 def word_count(filename):
     with open(filename) as f:
         return Counter(f.read().split())
