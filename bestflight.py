@@ -5,11 +5,7 @@ from geopy.distance import geodesic
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
-import sys
-import polyline
 import googlemaps
-from datetime import datetime
-
 
 ##Djisktra ALgo for calc
 # we'll use infinity as a default distance to nodes.
@@ -232,7 +228,7 @@ graph = Graph([
 print(graph.dijkstra("kul", "aus"))
 ########################################################################################################################
 
-trace0 = go.Scatter(x = [coordinateset.], y = coordinateset.__contains__('longitude'))
+trace0 = go.Scatter(x = [coordinateset], y = coordinateset.__contains__('longitude'))
 #trace1 = go.Scatter(
  #   x=[1, 2, 3, 4],
   #  y=[16, 5, 11, 9]
