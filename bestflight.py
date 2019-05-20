@@ -1,11 +1,15 @@
 from _ast import keyword
-from collections import deque, namedtuple
+from collections import deque, namedtuple, Counter
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
+import sys
+import polyline
 import googlemaps
+from datetime import datetime
+
 
 ##Djisktra ALgo for calc
 # we'll use infinity as a default distance to nodes.
@@ -95,72 +99,7 @@ class Graph:
             path.appendleft(current_vertex)
         return path
 
-########################################################################################################################
-##RABIN-KARP ALGORITHM
-d = 256
-
-# pat  -> pattern
-# txt  -> text
-# q    -> A prime number
-
-def search(pat, txt, q):
-    M = len(pat)
-    N = len(txt)
-    i = 0
-    j = 0
-    p = 0
-    t = 0
-    h = 1
-
-    for i in range(M - 1):
-        h = (h * d) % q
-
-    for i in range(M):
-        p = (d * p + ord(pat[i])) % q
-        t = (d * t + ord(txt[i])) % q
-
-    for i in range(N - M + 1):
-
-        if p == t:
-            # Check for characters one by one
-            for j in range(M):
-                if txt[i + j] != pat[j]:
-                    break
-
-            j += 1
-            if j == M:
-                print
-                "Pattern found at index " + str(i)
-
-        if i < N - M:
-            t = (d * (t - ord(txt[i]) * h) + ord(txt[i + M])) % q
-
-            if t < 0:
-                t = t + q
-
-########################################################################################################################
-#CHECK FOR POSITIVE AND NEGATIVE WORDS
-
-def wordfrequency_positive(input):
-    positive_words = open("positive_words.txt", "r")
-    sample_positive = positive_words.read().lower().split();
-    frequency_positive = {}
-    for i in input:
-        if (i in sample_positive):
-            frequency_positive[i] += 1
-        else:
-            frequency_positive[i] = 1
-
-def wordfrequency_negative(input):
-    negative_words = open("negative_words.txt", "r")
-    frequency_negative = {}
-    for i in input:
-        if (i in negative_words):
-            frequency_negative[i] += 1
-        else:
-            frequency_negative[i] = 1
-
-########################################################################################################################
+##---------------------------------------------------------------------------------------------------------##
 
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'OWIMPYbRvRbxNupsoiWe')
 geolocator = Nominatim(user_agent = "wia2005")
@@ -189,8 +128,18 @@ brazcoordinate = (braz.latitude, braz.longitude)
 hawcoordinate = (haw.latitude, haw.longitude)
 hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
-coordinateset = [kulcoordinate, nzcoordinate, jpncoordinate, auscoordinate, thaicoordinate, usacoordinate, ukcoordinate, gercoordinate
-                 , brazcoordinate, hawcoordinate, hkcoordinate, sgpcoordinate]
+
+trace0 = go.Scatter(
+    x=[1, 2, 3, 4],
+    y=[10, 15, 13, 17]
+)
+trace1 = go.Scatter(
+    x=[1, 2, 3, 4],
+    y=[16, 5, 11, 9]
+)
+data = [trace0, trace1]
+
+py.plot(data, filename = 'basic-line', auto_open=True)
 
 graph = Graph([
     ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
@@ -226,24 +175,12 @@ graph = Graph([
     ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)])
 
 print(graph.dijkstra("kul", "aus"))
-########################################################################################################################
-
-trace0 = go.Scatter(x = [coordinateset], y = coordinateset.__contains__('longitude'))
-#trace1 = go.Scatter(
- #   x=[1, 2, 3, 4],
-  #  y=[16, 5, 11, 9]
-#)
-data = [trace0]
-py.plot(data, filename = 'basic-line', auto_open=True)
-
-########################################################################################################################
+####################
 
 gmaps = googlemaps.Client(key='AIzaSyAKeF3vJdrKjN7YHsDKAfrOFjP5wLxaSo8')
 print("hallo")
 
 ##
-
-
 txt = "GEEKS FOR GEEKS"
 pat = "GEEK"
 q = 101  # A prime number
