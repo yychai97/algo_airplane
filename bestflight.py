@@ -1,17 +1,16 @@
-from _ast import keyword
-from collections import deque, namedtuple, Counter
+from collections import deque, namedtuple
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
-import sys
-import polyline
-import googlemaps
-from datetime import datetime
+import os
+import string
+import time
 
 
-##Djisktra ALgo for calc
+
+##DIJSKTRA ALGORITHM for calculation
 # we'll use infinity as a default distance to nodes.
 inf = float('inf')
 Edge = namedtuple('Edge', 'start, end, cost')
@@ -100,7 +99,7 @@ class Graph:
         return path
 
 ##---------------------------------------------------------------------------------------------------------##
-
+##OBTAINING COORDINATES FOR CITIES
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'OWIMPYbRvRbxNupsoiWe')
 geolocator = Nominatim(user_agent = "wia2005")
 
@@ -129,18 +128,9 @@ hawcoordinate = (haw.latitude, haw.longitude)
 hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
 
-trace0 = go.Scatter(
-    x=[1, 2, 3, 4],
-    y=[10, 15, 13, 17]
-)
-trace1 = go.Scatter(
-    x=[1, 2, 3, 4],
-    y=[16, 5, 11, 9]
-)
-data = [trace0, trace1]
-
-py.plot(data, filename = 'basic-line', auto_open=True)
-
+########################################################################################################################
+##GETTING DISTANCE BETWEEN DISTANCE
+##WILL BE USED FOR CALCULATING AND OBTAINING SHORTEST DISTANCE USING DIJKSTRA'S ALGORITHM
 graph = Graph([
     ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
     ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
@@ -174,14 +164,184 @@ graph = Graph([
     ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers),
     ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)])
 
+print("Before adding weight of political sentiment, the shortest path for KL to US is ")
 print(graph.dijkstra("kul", "aus"))
-####################
+########################################################################################################################
+##MAPPING LINES AND DISTANCE USING HERE MAPS
 
-gmaps = googlemaps.Client(key='AIzaSyAKeF3vJdrKjN7YHsDKAfrOFjP5wLxaSo8')
-print("hallo")
 
-##
-txt = "GEEKS FOR GEEKS"
-pat = "GEEK"
-q = 101  # A prime number
-search(pat, txt, q)
+
+
+
+
+
+########################################################################################################################
+##EXTRACTING WORDS
+##PLOT BAR GRAPHS OF POSITIVE AND NEGATIVE WORDS BASED ON EACH NEWS
+##WORD COUNT AND STOPS WORD
+
+
+trans_table = str.maketrans(string.punctuation + string.ascii_uppercase,
+                            " " * len(string.punctuation) + string.ascii_lowercase)
+
+
+def get_word_from_file(word):
+    word = word.translate(trans_table)
+    return word.split()
+
+
+class Newspaper:
+    def __init__(self, name, file):
+        self.country = name
+        self.word_list = get_word_from_file(file)
+
+        self.word_dict = {}
+        self.stop_dict = {}
+        self.positive = {}
+        self.neutral = {}
+        self.negative = {}
+
+    def generate_word_stop(self):
+        """
+        This is used to generate dict for word frequency.
+        :return: None
+        """
+        for word in self.word_list:
+            if not rabin_karp(word, "stop_word.txt"):
+                if word in self.word_dict:
+                    self.word_dict[word] += 1
+                else:
+                    self.word_dict[word] = 1
+            elif len(word) > 1:
+                if word in self.stop_dict:
+                    self.stop_dict[word] += 1
+                else:
+                    self.stop_dict[word] = 1
+
+    def generate_sentiment(self):
+        """
+        This is used to generate dict for word frequency.
+        :return: None
+        """
+        for word, value in self.word_dict.items():
+            if rabin_karp(word, "positive_words.txt"):
+                self.positive[word] = value
+
+            if rabin_karp(word, "negative_words.txt"):
+                self.negative[word] = value
+
+    def get_sum(self, name):
+        attr = getattr(self, name)
+        return sum(attr.values())
+
+
+def plot_count(country_list):
+    country_name = []
+    country_stop = []
+    country_word = []
+
+    for name, newspapers in country_list.items():
+        country_stop.append(sum(newspaper.get_sum("stop_dict") for newspaper in newspapers))
+        country_word.append(sum(newspaper.get_sum("word_dict") for newspaper in newspapers))
+        country_name.append(name)
+
+    trace1 = go.Bar(
+        x=country_name,
+        y=country_word,
+        name='Word Count'
+    )
+    trace2 = go.Bar(
+        x=country_name,
+        y=country_stop,
+        name='Stop Count'
+    )
+
+    data = [trace1, trace2]
+    layout = go.Layout(
+        barmode='group'
+    )
+
+    fig = go.Figure(data=data, layout=layout)
+    py.plot(fig, filename='grouped-bar')
+
+
+def plot_sentiment(newspaper_list, name):
+    num = [i for i in range(len(newspaper_list))]
+    positive = [newspaper.get_sum("positive") for newspaper in newspaper_list]
+    negative = [newspaper.get_sum("negative") for newspaper in newspaper_list]
+
+    trace1 = go.Bar(
+        x=num,
+        y=positive,
+        name='Positive'
+    )
+    trace2 = go.Bar(
+        x=num,
+        y=negative,
+        name='Negative'
+    )
+
+    data = [trace1, trace2]
+    layout = go.Layout(
+        barmode='group'
+    )
+
+    fig = go.Figure(data=data, layout=layout)
+    py.plot(fig, filename=name)
+
+
+def rabin_karp(pattern, file_name):
+    words = open(file_name).read().translate(trans_table)
+    length = len(pattern)
+    hpattern = hash(pattern)
+
+    is_matched = False
+    for i in range(0, len(words) - length):
+        hword = hash(words[i:length + i])
+        if hword == hpattern:
+            if pattern == words[i:length + i]:
+                is_matched = True
+                break
+
+    return is_matched
+
+
+def main():
+    now = time.time()
+    country_list = {}
+    for i in os.listdir("news"):
+        # Read everything
+        country = i[:-6]
+        newspaper_list = country_list.setdefault(country, [])
+        f = open(os.path.join("news", i), encoding='ISO-8859-1')
+        news = Newspaper(country, f.read())
+        f.close()
+        news.generate_word_stop()
+        news.generate_sentiment()
+        newspaper_list.append(news)
+        country_list[country] = newspaper_list
+
+    plot_count(country_list)
+    for name, newspaper_list in country_list.items():
+        plot_sentiment(newspaper_list, name)
+    print(time.time() - now)
+    return country_list
+
+if __name__ == "__main__":
+    main()
+
+########################################################################################################################
+##HISTOGRAMS OF POSITIVE AND NEGATIVE WORDS
+
+
+
+
+########################################################################################################################
+##WEIGHTING POLITICAL SENTIMENT INTO DATA
+
+
+
+
+
+########################################################################################################################
+##PROBABILITY OF RANDOM ROUTES
