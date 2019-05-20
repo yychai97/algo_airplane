@@ -2,6 +2,7 @@ import os
 import string
 import plotly.plotly as py
 import plotly.graph_objs as go
+import time
 
 trans_table = str.maketrans(string.punctuation + string.ascii_uppercase,
                             " " * len(string.punctuation) + string.ascii_lowercase)
@@ -12,41 +13,68 @@ def get_word_from_file(word):
     return word.split()
 
 
-def generate_dict(word_list, word_dict, stop_dict, file_name):
-    for word in word_list:
-        if not rabin_karp(word, file_name):
-            if word in word_dict:
-                word_dict[word] += 1
-            else:
-                word_dict[word] = 1
-        elif len(word) > 1:
-            if word in stop_dict:
-                stop_dict[word] += 1
-            else:
-                stop_dict[word] = 1
+class Newspaper:
+    def __init__(self, name, file):
+        self.country = name
+        self.word_list = get_word_from_file(file)
 
-    return word_dict, stop_dict
+        self.word_dict = {}
+        self.stop_dict = {}
+        self.positive = {}
+        self.negative = {}
+
+    def generate_word_stop(self):
+        """
+        This is used to generate dict for word frequency.
+        :return: None
+        """
+        for word in self.word_list:
+            if not rabin_karp(word, "stop_word.txt"):
+                if word in self.word_dict:
+                    self.word_dict[word] += 1
+                else:
+                    self.word_dict[word] = 1
+            elif len(word) > 1:
+                if word in self.stop_dict:
+                    self.stop_dict[word] += 1
+                else:
+                    self.stop_dict[word] = 1
+
+    def generate_sentiment(self):
+        """
+        This is used to generate dict for word frequency.
+        :return: None
+        """
+        for word, value in self.word_dict.items():
+            if rabin_karp(word, "positive_words.txt"):
+                self.positive[word] = value
+
+            if rabin_karp(word, "negative_words.txt"):
+                self.negative[word] = value
+
+    def get_sum(self, name):
+        attr = getattr(self, name)
+        return sum(attr.values())
 
 
-def plot_count(country_word_list: dict, country_stop_list: dict):
-    """
+def plot_count(country_list):
+    country_name = []
+    country_stop = []
+    country_word = []
 
-    :param country_word_list: dict
-    :param country_stop_list:
-    :return:
-    """
-    country = list(country_word_list.keys())
-    count = [sum(country_word_list[i].values()) for i in country]
-    stop_count = [sum(country_stop_list[i].values()) for i in country]
+    for name, newspapers in country_list.items():
+        country_stop.append(sum(newspaper.get_sum("stop_dict") for newspaper in newspapers))
+        country_word.append(sum(newspaper.get_sum("word_dict") for newspaper in newspapers))
+        country_name.append(name)
 
     trace1 = go.Bar(
-        x=country,
-        y=count,
+        x=country_name,
+        y=country_word,
         name='Word Count'
     )
     trace2 = go.Bar(
-        x=country,
-        y=stop_count,
+        x=country_name,
+        y=country_stop,
         name='Stop Count'
     )
 
@@ -59,18 +87,18 @@ def plot_count(country_word_list: dict, country_stop_list: dict):
     py.plot(fig, filename='grouped-bar')
 
 
-def plot_sentiment(sentiment, country_name):
-    country = list(sentiment.keys())
-    positive = [i['positive'] for i in sentiment.values()]
-    negative = [i['negative'] for i in sentiment.values()]
+def plot_sentiment(newspaper_list, name):
+    num = [i for i in range(len(newspaper_list))]
+    positive = [newspaper.get_sum("positive") for newspaper in newspaper_list]
+    negative = [newspaper.get_sum("negative") for newspaper in newspaper_list]
 
     trace1 = go.Bar(
-        x=country,
+        x=num,
         y=positive,
         name='Positive'
     )
     trace2 = go.Bar(
-        x=country,
+        x=num,
         y=negative,
         name='Negative'
     )
@@ -81,11 +109,11 @@ def plot_sentiment(sentiment, country_name):
     )
 
     fig = go.Figure(data=data, layout=layout)
-    py.plot(fig, filename='sentiment')
+    py.plot(fig, filename=name)
 
 
 def rabin_karp(pattern, file_name):
-    words = open(file_name).read()
+    words = open(file_name).read().translate(trans_table)
     length = len(pattern)
     hpattern = hash(pattern)
 
@@ -101,45 +129,25 @@ def rabin_karp(pattern, file_name):
 
 
 def main():
-    country_word_list = {}
-    country_stop_list = {}
-    country_sentiment = {}
+    now = time.time()
+    country_list = {}
     for i in os.listdir("news"):
         # Read everything
         country = i[:-6]
-
-        try:
-            # Get country name
-            word_dict = country_word_list[country]
-            stop_dict = country_stop_list[country]
-            sentiment = country_sentiment[country]
-        except KeyError:
-            word_dict = {}
-            stop_dict = {}
-            sentiment = {"positive": 0, "negative": 0}
-
+        newspaper_list = country_list.setdefault(country, [])
         f = open(os.path.join("news", i), encoding='ISO-8859-1')
-        word_list = get_word_from_file(f.read())
+        news = Newspaper(country, f.read())
         f.close()
+        news.generate_word_stop()
+        news.generate_sentiment()
+        newspaper_list.append(news)
+        country_list[country] = newspaper_list
 
-        word_dict, stop_dict = generate_dict(word_list, word_dict, stop_dict, "stop_word.txt")
-
-        country_word_list[country] = word_dict
-        country_stop_list[country] = stop_dict
-
-        # Getting from word list
-        for word, value in country_word_list[country].items():
-            # getting positive
-            if rabin_karp(word, "positive_words.txt"):
-                sentiment["positive"] += 1
-            elif rabin_karp(word, "negative_words.txt"):
-                sentiment["negative"] += 1
-
-        country_sentiment[country] = sentiment
-
-    plot_count(country_word_list, country_stop_list)
-    plot_sentiment(country_sentiment)
-
+    plot_count(country_list)
+    for name, newspaper_list in country_list.items():
+        plot_sentiment(newspaper_list, name)
+    print(time.time() - now)
+    return country_list
 
 if __name__ == "__main__":
     main()
