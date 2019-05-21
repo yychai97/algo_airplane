@@ -7,6 +7,8 @@ import plotly.graph_objs as go
 import os
 import string
 import time
+import webbrowser
+
 
 
 
@@ -169,10 +171,11 @@ print(graph.dijkstra("kul", "aus"))
 ########################################################################################################################
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
+def callHEREMAPS(location1, location2):
+    mapsweb = webbrowser.open_new("https://tkchui.github.io/algomap/map1.html?path=" + str(location1) + "," + str(location2))
 
 
-
-
+callHEREMAPS("Australia", "United States")
 
 
 ########################################################################################################################
