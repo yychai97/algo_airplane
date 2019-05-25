@@ -8,8 +8,7 @@ import os
 import string
 import time
 import webbrowser
-
-
+from numba import vectorize
 
 
 ##DIJSKTRA ALGORITHM for calculation
@@ -100,11 +99,14 @@ class Graph:
             path.appendleft(current_vertex)
         return path
 
+
+
 ##---------------------------------------------------------------------------------------------------------##
 ##OBTAINING COORDINATES FOR CITIES
-plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'OWIMPYbRvRbxNupsoiWe')
+plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'TsWmwKFkn3hd8MMIDVEA')
 geolocator = Nominatim(user_agent = "wia2005")
 
+w_nz, w_jpn, w_aus, w_thai, w_usa, w_uk, w_ger, w_braz, w_haw, w_hk, w_sgp = 0
 kul = geolocator.geocode("kuala lumpur malaysia")
 nz = geolocator.geocode("new zealand")
 jpn = geolocator.geocode("japan")
@@ -134,40 +136,39 @@ sgpcoordinate = (sgp.latitude, sgp.longitude)
 ##GETTING DISTANCE BETWEEN DISTANCE
 ##WILL BE USED FOR CALCULATING AND OBTAINING SHORTEST DISTANCE USING DIJKSTRA'S ALGORITHM
 graph = Graph([
-    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
-    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
-    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
-    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers),
-    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers),
-    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers),
-    ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
-    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers),
-    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers),
-    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers),
-    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers),
-    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers),
-    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers),
-    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers),
-    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers),
-    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers),
-    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers),
-    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers),
-    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers),
-    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers),
-    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers),
-    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers),
-    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers),
-    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers),
-    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers),
-    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers),
-    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers),
-    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers),
-    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers),
-    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers),
-    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)])
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers + w_thai),
+    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers + w_hk),
+    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers + w_nz),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers + w_ger),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers + w_haw),
+    ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers + w_hk),
+    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers + w_nz),
+    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers + w_ger),
+    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers + w_haw),
+    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers) + w_sgp,
+    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers + w_nz),
+    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers + w_ger),
+    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers + w_haw),
+    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers + w_usa),
+    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers + w_ger),
+    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers + w_jpn),
+    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers + w_usa),
+    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers + w_haw),
+    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers + w_usa),
+    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers + w_aus),
+    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers + w_uk),
+    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometer + w_braz),
+    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers + w_usa),
+    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers + w_aus),
+    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers + w_uk),
+    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers) + w_uk,
+    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers + w_uk),
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)] +w_braz)
 
-print("Before adding weight of political sentiment, the shortest path for KL to US is ")
-print(graph.dijkstra("kul", "aus"))
+
 ########################################################################################################################
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
@@ -310,6 +311,11 @@ def rabin_karp(pattern, file_name):
 
 
 def main():
+    print("Before adding weight of political sentiment, list of destinations: ")
+    print(graph.dijkstra("kul", "us"))
+    print(graph.dijkstra("kul", "ger"))
+    print(graph.dijkstra("kul", "uk"))
+
     now = time.time()
     country_list = {}
     for i in os.listdir("news"):
