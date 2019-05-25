@@ -13,6 +13,34 @@ def get_word_from_file(word):
     return word.split()
 
 
+class Country:
+    def __init__(self, name):
+        self.name = name
+        self.newspaper_list = []
+        self.sentiment = {}
+        self.word = {}
+
+    def add_newspaper(self, newspaper):
+        self.newspaper_list.append(newspaper)
+
+    def count_sentiment(self):
+        if len(self.sentiment) == 0:
+            self.sentiment["positive"] = sum(newspaper.get_sum("positive") for newspaper in self.newspaper_list)
+            self.sentiment["negative"] = sum(newspaper.get_sum("negative") for newspaper in self.newspaper_list)
+
+        return self.sentiment["positive"], self.sentiment["negative"]
+
+    def count_word_stop(self):
+        if len(self.word) == 0:
+            self.word["stop"] = sum(newspaper.get_sum("word_dict") for newspaper in self.newspaper_list)
+            self.word["word"] = sum(newspaper.get_sum("word_dict") for newspaper in self.newspaper_list)
+
+        return self.word["stop"], self.word["word"]
+
+    def __eq__(self, obj):
+        return isinstance(obj, Country) and obj.name == self.name
+
+
 class Newspaper:
     def __init__(self, name, file):
         self.country = name
@@ -133,21 +161,23 @@ def main():
     country_list = {}
     for i in os.listdir("news"):
         # Read everything
-        country = i[:-6]
-        newspaper_list = country_list.setdefault(country, [])
+        country_name = i[:-6]
+        country = country_list.setdefault(country_name, Country(country_name))
+
         f = open(os.path.join("news", i), encoding='ISO-8859-1')
-        news = Newspaper(country, f.read())
+        news = Newspaper(country_name, f.read())
         f.close()
         news.generate_word_stop()
         news.generate_sentiment()
-        newspaper_list.append(news)
-        country_list[country] = newspaper_list
-
-    plot_count(country_list)
-    for name, newspaper_list in country_list.items():
-        plot_sentiment(newspaper_list, name)
+        country.add_newspaper(news)
+        country_list[country_name] = country
+    # plot_count(country_list)
+    # for name, newspaper_list in country_list.items():
+    #     plot_sentiment(newspaper_list, name)
     print(time.time() - now)
     return country_list
 
+
 if __name__ == "__main__":
-    main()
+    x = main()
+    print(x)
