@@ -160,7 +160,7 @@ graph = Graph([
     ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers + w_usa),
     ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers + w_aus),
     ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers + w_uk),
-    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometer + w_braz),
+    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers + w_braz),
     ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers + w_usa),
     ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers + w_aus),
     ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers + w_uk),
