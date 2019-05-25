@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f86fa8b0-59b6-4c99-b4ea-1278933bb1e9" name="Default Changelist" comment="" />
+    <list default="true" id="f86fa8b0-59b6-4c99-b4ea-1278933bb1e9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bestflight.py" beforeDir="false" afterPath="$PROJECT_DIR$/bestflight.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,10 +21,21 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bestflight.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="134" column="13" selection-start-line="134" selection-start-column="13" selection-end-line="134" selection-end-column="13" />
+            <state relative-caret-position="6713">
+              <caret line="410" column="79" selection-start-line="410" selection-start-column="79" selection-end-line="410" selection-end-column="79" />
               <folding>
-                <element signature="e#0#24#0" expanded="true" />
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/matching.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -55,7 +69,6 @@
         <option value="$PROJECT_DIR$/news/hongkong_1" />
         <option value="$PROJECT_DIR$/news/hongkong_2" />
         <option value="$PROJECT_DIR$/news/hongkong_3" />
-        <option value="$PROJECT_DIR$/bestflight.py" />
         <option value="$PROJECT_DIR$/news/hongkong_4" />
         <option value="$PROJECT_DIR$/news/hongkong_5" />
         <option value="$PROJECT_DIR$/news/singapore_1" />
@@ -63,6 +76,7 @@
         <option value="$PROJECT_DIR$/news/singapore_3" />
         <option value="$PROJECT_DIR$/news/singapore_4" />
         <option value="$PROJECT_DIR$/news/singapore_5" />
+        <option value="$PROJECT_DIR$/bestflight.py" />
       </list>
     </option>
   </component>
@@ -80,17 +94,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="algo_airplane" type="b2602c69:ProjectViewProjectNode" />
-              <item name="algo_airplane" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -107,6 +110,17 @@
               <item name="algo_airplane" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="C:\Users\chick\OneDrive - 365.um.edu.my\Documents\PyCharm\algo_airplane" type="442cc68d:ScopeViewTreeModel$RootNode" />
               <item name="python-lessons4" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="newairplane" type="b2602c69:ProjectViewProjectNode" />
+              <item name="newairplane" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -141,7 +155,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.html-to-list1">
+  <component name="RunManager" selected="Python.bestflight">
     <configuration name="bestflight" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="algo_airplane" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -228,10 +242,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.bestflight" />
         <item itemvalue="Python.html-to-list1" />
         <item itemvalue="Python.lab6_q2" />
         <item itemvalue="Python.lab6_q1" />
-        <item itemvalue="Python.bestflight" />
       </list>
     </recent_temporary>
   </component>
@@ -343,22 +357,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24768825" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2470238" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.2857143" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28477904" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32956153" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49925596" weight="0.32531825" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32956153" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3289689" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50074404" side_tool="true" weight="0.3289689" />
-      <window_info anchor="bottom" id="Python Console" order="10" visible="true" weight="0.32956153" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3289689" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -422,13 +437,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="update news + coding" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/site-packages/plotly/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/site-packages/plotly/__init__.py" />
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -437,27 +446,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/negative.txt" />
-    <entry file="file://$PROJECT_DIR$/../NewProject/lab6_q2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="574">
-          <caret line="72" column="31" selection-start-line="72" selection-start-column="24" selection-end-line="72" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../NewProject/lab6_q2.py" />
     <entry file="file://$PROJECT_DIR$/positive.txt" />
-    <entry file="file://$PROJECT_DIR$/../NewProject/lab6_q1.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python-lessons4/html-to-list1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python-lessons4/obo.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../NewProject/lab6_q1.py" />
+    <entry file="file://$PROJECT_DIR$/python-lessons4/html-to-list1.py" />
+    <entry file="file://$PROJECT_DIR$/python-lessons4/obo.py" />
     <entry file="file://$PROJECT_DIR$/positive_words.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="430">
@@ -473,13 +466,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/news/germany_3" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="247" column="11" lean-forward="true" selection-start-line="247" selection-start-column="11" selection-end-line="247" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.txt" />
     <entry file="file://$PROJECT_DIR$/news/germany_3.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -493,13 +480,7 @@
     <entry file="file://$PROJECT_DIR$/news/germany_5.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/news/hawaii_1">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="43" selection-start-line="43" selection-end-line="43" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/news/hawaii_1" />
     <entry file="file://$PROJECT_DIR$/news/germany_1.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="648">
@@ -514,113 +495,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/news/hawaii_2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="59" column="19" selection-start-line="59" selection-start-column="19" selection-end-line="59" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/hawaii_3">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="52" selection-start-line="18" selection-start-column="52" selection-end-line="18" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/hawaii_4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="206" selection-start-line="10" selection-start-column="206" selection-end-line="10" selection-end-column="206" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/hawaii_5">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="56" selection-start-column="56" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/hongkong_1">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="43" column="37" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/hongkong_2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="55" selection-start-line="55" selection-end-line="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/hongkong_3">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="41" selection-start-line="41" selection-end-line="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/hongkong_4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="10" lean-forward="true" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/singapore_1">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="163" selection-start-line="163" selection-end-line="163" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/singapore_2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="42" selection-start-line="42" selection-end-line="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/hongkong_5">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="419" selection-start-line="419" selection-end-line="419" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/singapore_3">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="95" column="90" selection-start-line="95" selection-start-column="90" selection-end-line="95" selection-end-column="90" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/singapore_4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="38" column="167" selection-start-line="38" selection-start-column="167" selection-end-line="38" selection-end-column="167" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/news/singapore_5">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/news/hawaii_2" />
+    <entry file="file://$PROJECT_DIR$/news/hawaii_3" />
+    <entry file="file://$PROJECT_DIR$/news/hawaii_4" />
+    <entry file="file://$PROJECT_DIR$/news/hawaii_5" />
+    <entry file="file://$PROJECT_DIR$/news/hongkong_1" />
+    <entry file="file://$PROJECT_DIR$/news/hongkong_2" />
+    <entry file="file://$PROJECT_DIR$/news/hongkong_3" />
+    <entry file="file://$PROJECT_DIR$/news/hongkong_4" />
+    <entry file="file://$PROJECT_DIR$/news/singapore_1" />
+    <entry file="file://$PROJECT_DIR$/news/singapore_2" />
+    <entry file="file://$PROJECT_DIR$/news/hongkong_5" />
+    <entry file="file://$PROJECT_DIR$/news/singapore_3" />
+    <entry file="file://$PROJECT_DIR$/news/singapore_4" />
+    <entry file="file://$PROJECT_DIR$/news/singapore_5" />
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/matching.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bestflight.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="134" column="13" selection-start-line="134" selection-start-column="13" selection-end-line="134" selection-end-column="13" />
+        <state relative-caret-position="6713">
+          <caret line="410" column="79" selection-start-line="410" selection-start-column="79" selection-end-line="410" selection-end-column="79" />
           <folding>
-            <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
