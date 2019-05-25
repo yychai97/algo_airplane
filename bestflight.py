@@ -166,7 +166,7 @@ graph = Graph([
     ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers + w_uk),
     ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers) + w_uk,
     ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers + w_uk),
-    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)] +w_braz)
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)+w_braz] )
 
 
 ########################################################################################################################
@@ -310,11 +310,64 @@ def rabin_karp(pattern, file_name):
     return is_matched
 
 
+########################################################################################################################
+##HISTOGRAMS OF POSITIVE AND NEGATIVE WORDS
+
+
+
+
+########################################################################################################################
+##WEIGHTING POLITICAL SENTIMENT INTO DATA
+graph_weighted = Graph([
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers + w_thai),
+    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers + w_hk),
+    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers + w_nz),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers + w_ger),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers + w_haw),
+    ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers + w_hk),
+    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers + w_nz),
+    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers + w_ger),
+    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers + w_haw),
+    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers) + w_sgp,
+    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers + w_nz),
+    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers + w_ger),
+    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers + w_haw),
+    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers + w_usa),
+    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers + w_ger),
+    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers + w_jpn),
+    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers + w_usa),
+    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers + w_haw),
+    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers + w_usa),
+    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers + w_aus),
+    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers + w_uk),
+    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers + w_braz),
+    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers + w_usa),
+    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers + w_aus),
+    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers + w_uk),
+    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers) + w_uk,
+    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers + w_uk),
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)+w_braz] )
+
+
+
+
+########################################################################################################################
+##PROBABILITY OF RANDOM ROUTES
+
+
+
+
+
+########################################################################################################################
 def main():
     print("Before adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra("kul", "us"))
     print(graph.dijkstra("kul", "ger"))
     print(graph.dijkstra("kul", "uk"))
+    print(graph.dijkstra("kul", "braz"))
 
     now = time.time()
     country_list = {}
@@ -333,24 +386,15 @@ def main():
     plot_count(country_list)
     for name, newspaper_list in country_list.items():
         plot_sentiment(newspaper_list, name)
+
+
+    print("After adding weight of political sentiment, list of destinations: ")
+    print(graph_weighted.dijkstra("kul", "us"))
+    print(graph_weighted.dijkstra("kul", "ger"))
+    print(graph_weighted.dijkstra("kul", "uk"))
+    print(graph_weighted.dijkstra("kul", "braz"))
     print(time.time() - now)
     return country_list
 
 if __name__ == "__main__":
     main()
-
-########################################################################################################################
-##HISTOGRAMS OF POSITIVE AND NEGATIVE WORDS
-
-
-
-
-########################################################################################################################
-##WEIGHTING POLITICAL SENTIMENT INTO DATA
-
-
-
-
-
-########################################################################################################################
-##PROBABILITY OF RANDOM ROUTES
