@@ -17,14 +17,14 @@ class Country:
     def __init__(self, name):
         self.name = name
         self.newspaper_list = []
-        self.sentiment = None
+        self.sentiment = {}
         self.word = {}
 
     def add_newspaper(self, newspaper):
         self.newspaper_list.append(newspaper)
 
     def count_sentiment(self):
-        if self.sentiment is None:
+        if len(self.sentiment) == 0:
             self.sentiment["positive"] = sum(newspaper.get_sum("positive") for newspaper in self.newspaper_list)
             self.sentiment["negative"] = sum(newspaper.get_sum("negative") for newspaper in self.newspaper_list)
 
