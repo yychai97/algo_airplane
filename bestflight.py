@@ -9,7 +9,7 @@ import sys
 import polyline
 import googlemaps
 from datetime import datetime
-
+from matching import main
 
 ##Djisktra ALgo for calc
 # we'll use infinity as a default distance to nodes.
@@ -102,7 +102,7 @@ class Graph:
 ##---------------------------------------------------------------------------------------------------------##
 
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'OWIMPYbRvRbxNupsoiWe')
-geolocator = Nominatim(user_agent = "wia2005")
+geolocator = Nominatim(user_agent="wia2005")
 
 kul = geolocator.geocode("kuala lumpur malaysia")
 nz = geolocator.geocode("new zealand")
@@ -141,47 +141,49 @@ data = [trace0, trace1]
 
 py.plot(data, filename = 'basic-line', auto_open=True)
 
+country_list = main()
+
 graph = Graph([
-    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers*country_list["Thailand"].count_sentiment()),
     ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
     ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
-    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers),
-    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers),
-    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
     ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
-    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers),
-    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers),
-    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers),
+    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
+    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
+    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
     ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers),
-    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers),
-    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers),
-    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers),
-    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers),
-    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers),
-    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers),
-    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers),
-    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers),
-    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers),
-    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers),
-    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers),
-    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers),
-    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers),
+    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
+    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
+    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
+    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers*country_list["Janpan"].count_sentiment()),
+    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
+    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
+    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers*country_list["Japan"].count_sentiment()),
+    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
+    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
+    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers*country_list["Japan"].count_sentiment()),
+    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
+    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers*country_list["australia"].count_sentiment()),
+    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
     ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers),
-    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers),
-    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers),
-    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers),
-    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers),
-    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers),
+    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
+    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers*country_list["australia"].count_sentiment()),
+    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
+    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
+    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
     ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)])
 
 print(graph.dijkstra("kul", "aus"))
 ####################
 
 gmaps = googlemaps.Client(key='AIzaSyAKeF3vJdrKjN7YHsDKAfrOFjP5wLxaSo8')
-print("hallo")
 
-##
-txt = "GEEKS FOR GEEKS"
-pat = "GEEK"
-q = 101  # A prime number
-search(pat, txt, q)
+#
+# ##
+# txt = "GEEKS FOR GEEKS"
+# pat = "GEEK"
+# q = 101  # A prime number
+# search(pat, txt, q)
