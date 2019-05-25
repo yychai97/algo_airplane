@@ -194,10 +194,7 @@ graph = Graph([
     ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers+w_braz),
     ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers + w_uk),
     ("braz", "jpn", geodesic(brazcoordinate, jpncoordinate).kilometers + w_jpn),
-    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers + w_usa)
-
-
-])
+    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers + w_usa)])
 
 
 ########################################################################################################################
