@@ -302,7 +302,7 @@ graph_weighted = Graph([
 
 def callHEREMAPS(locationlist):
     mapsweb = "https://tkchui.github.io/algomap/map1.html?path="
-    for i in locationlist:
+    for i in list(locationlist):
         if i == len(locationlist)-1:
             mapsweb + str(locationlist.pop())
             break
