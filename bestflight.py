@@ -4,11 +4,16 @@ from geopy.distance import geodesic
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
+import sys
+import polyline
+import googlemaps
+from datetime import datetime
+from matching import main
 import os
 import string
 import time
 import webbrowser
-from numba import vectorize
+
 
 
 ##DIJSKTRA ALGORITHM for calculation
@@ -103,12 +108,12 @@ class Graph:
 
 
 
+
 ##---------------------------------------------------------------------------------------------------------##
 ##OBTAINING COORDINATES FOR CITIES
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'TsWmwKFkn3hd8MMIDVEA')
 geolocator = Nominatim(user_agent = "wia2005")
 
-w_nz, w_jpn, w_aus, w_thai, w_usa, w_uk, w_ger, w_braz, w_haw, w_hk, w_sgp = 0
 kul = geolocator.geocode("kuala lumpur malaysia")
 nz = geolocator.geocode("new zealand")
 jpn = geolocator.geocode("japan")
@@ -134,17 +139,47 @@ hawcoordinate = (haw.latitude, haw.longitude)
 hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
 
+
+country_list = main()
+
 ########################################################################################################################
 ##GETTING DISTANCE BETWEEN DISTANCE
 ##WILL BE USED FOR CALCULATING AND OBTAINING SHORTEST DISTANCE USING DIJKSTRA'S ALGORITHM
+
 graph = Graph([
-    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers*country_list["Thailand"].count_sentiment()),
     ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
     ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
-    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers),
-    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers),
-    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
     ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
+
+    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
+    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
+    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
+    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers),
+    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
+    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
+    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
+    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers*country_list["Janpan"].count_sentiment()),
+    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
+    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
+    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers*country_list["Japan"].count_sentiment()),
+    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
+    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
+    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers*country_list["Japan"].count_sentiment()),
+    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
+    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers*country_list["australia"].count_sentiment()),
+    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
+    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers),
+    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
+    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers*country_list["australia"].count_sentiment()),
+    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
+    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
+    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)])
+
     ("hk", "thai", geodesic(hkcoordinate, thaicoordinate).kilometers),
     ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers),
     ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers),
@@ -445,6 +480,7 @@ def main():
     plot_count(country_list)
     for name, newspaper_list in country_list.items():
         plot_sentiment(newspaper_list, name)
+
 
 
     print("After adding weight of political sentiment, list of destinations: ")
