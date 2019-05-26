@@ -102,6 +102,35 @@ class Graph:
             path.appendleft(current_vertex)
         return path
 
+    def dijkstra_with_weight(self, source, dest):
+        assert source in self.vertices, 'Such source node doesn\'t exist'
+        distances = {vertex: inf for vertex in self.vertices}
+        previous_vertices = {
+            vertex: None for vertex in self.vertices
+        }
+        distances[source] = 0
+        vertices = self.vertices.copy()
+
+        while vertices:
+            current_vertex = min(
+                vertices, key=lambda vertex: distances[vertex])
+            vertices.remove(current_vertex)
+            if distances[current_vertex] == inf:
+                break
+            for neighbour, cost in self.neighbours[current_vertex]:
+                alternative_route = distances[current_vertex] + cost + getWeight(neighbour)
+                if alternative_route < distances[neighbour]:
+                    distances[neighbour] = alternative_route
+                    previous_vertices[neighbour] = current_vertex
+
+        path, current_vertex = deque(), dest
+        while previous_vertices[current_vertex] is not None:
+            path.appendleft(current_vertex)
+            current_vertex = previous_vertices[current_vertex]
+        if path:
+            path.appendleft(current_vertex)
+        return path
+
 
 
 
@@ -382,9 +411,11 @@ def rabin_karp(pattern, file_name):
 ########################################################################################################################
 ##WEIGHTING POLITICAL SENTIMENT INTO DATA
 
-def getWeight():
-
-
+def getWeight(neighborCode):
+    for neighborCode, pos, neg in weight_list:
+        if neighborCode == weight_list:
+            sentiment =  pos/(pos + neg)
+        return sentiment
 
 
 ########################################################################################################################
