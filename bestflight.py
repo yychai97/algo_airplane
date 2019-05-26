@@ -177,9 +177,71 @@ graph = Graph([
     ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
     ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
     ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
-    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate),
-    ("thai", "ger", geodesic(thaicoordinate, gercoordinate),
-    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers),
+    ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers),
+    ("hk", "thai", geodesic(hkcoordinate, thaicoordinate).kilometers),
+    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers),
+    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers),
+    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers),
+    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers),
+    ("sgp", "hk", geodesic(sgpcoordinate, hkcoordinate).kilometers),
+    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers),
+    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers),
+    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers),
+    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers),
+    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers),
+    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers),
+    ("nz", "thai", geodesic(nzcoordinate, thaicoordinate).kilometers),
+    ("nz", "hk", geodesic(nzcoordinate, hkcoordinate).kilometers),
+    ("nz", "sgp", geodesic(nzcoordinate, sgpcoordinate).kilometers),
+    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers),
+    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers),
+    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers),
+    ("ger", "thai", geodesic(gercoordinate, thaicoordinate).kilometers),
+    ("ger", "hk", geodesic(gercoordinate, hkcoordinate).kilometers),
+    ("ger", "sgp", geodesic(gercoordinate, sgpcoordinate).kilometers),
+    ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers),
+    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers),
+    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers),
+    ("haw", "thai", geodesic(hawcoordinate, thaicoordinate).kilometers),
+    ("haw", "hk", geodesic(hawcoordinate, hkcoordinate).kilometers),
+    ("haw", "sgp", geodesic(hawcoordinate, sgpcoordinate).kilometers),
+    ("haw", "ger", geodesic(hawcoordinate, gercoordinate).kilometers),
+    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers),
+    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers),
+    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers),
+    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers),
+    ("jpn", "nz", geodesic(jpncoordinate, nzcoordinate).kilometers),
+    ("jpn", "ger", geodesic(jpncoordinate, gercoordinate).kilometers),
+    ("jpn", "haw", geodesic(jpncoordinate, hawcoordinate).kilometers),
+    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers),
+    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers),
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers),
+    ("usa", "nz", geodesic(usacoordinate, nzcoordinate).kilometers),
+    ("usa", "ger", geodesic(usacoordinate, gercoordinate).kilometers),
+    ("usa", "haw", geodesic(usacoordinate, hawcoordinate).kilometers),
+    ("usa", "jpn", geodesic(usacoordinate, jpncoordinate).kilometers),
+    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers),
+    ("aus", "jpn", geodesic(auscoordinate, jpncoordinate).kilometers),
+    ("aus", "usa", geodesic(auscoordinate, usacoordinate).kilometers),
+    ("uk", "jpn", geodesic(ukcoordinate, jpncoordinate).kilometers),
+    ("uk", "usa", geodesic(ukcoordinate, usacoordinate).kilometers),
+    ("uk", "aus", geodesic(ukcoordinate, auscoordinate).kilometers),
+    ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers),
+    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers),
+    ("braz", "jpn", geodesic(brazcoordinate, jpncoordinate).kilometers),
+    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers)])
+
+graph_weighted = Graph([
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
+    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
+    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers),
     ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
     ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers),
     ("hk", "thai", geodesic(hkcoordinate, thaicoordinate).kilometers),
@@ -241,11 +303,13 @@ graph = Graph([
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
 def callHEREMAPS(locationlist):
-    mapsweb = webbrowser.open_new("https://tkchui.github.io/algomap/map1.html?path=" + locationlist)
-
-
-
-
+    mapsweb = "https://tkchui.github.io/algomap/map1.html?path="
+    for i in locationlist:
+        if i == len(locationlist)-1:
+            mapsweb + str(locationlist.pop())
+            break
+        mapsweb + str(locationlist.pop()) + ","
+    webbrowser.open_new(mapsweb)
 
 ########################################################################################################################
 ##EXTRACTING WORDS
@@ -405,7 +469,7 @@ def getWeight(neighborCode):
 ########################################################################################################################
 def main():
     print("Before adding weight of political sentiment, list of destinations: ")
-    print(graph.dijkstra("kul", "us"))
+    print(graph.dijkstra("kul", "usa"))
     print(graph.dijkstra("kul", "ger"))
     print(graph.dijkstra("kul", "uk"))
     print(graph.dijkstra("kul", "braz"))
@@ -431,10 +495,10 @@ def main():
 
 
     print("After adding weight of political sentiment, list of destinations: ")
-    print(graph_weighted.dijkstra("kul", "us"))
-    print(graph_weighted.dijkstra("kul", "ger"))
-    print(graph_weighted.dijkstra("kul", "uk"))
-    print(graph_weighted.dijkstra("kul", "braz"))
+    print(graph_weighted.dijkstra_with_weight("kul", "usa"))
+    print(graph_weighted.dijkstra_with_weight("kul", "ger"))
+    print(graph_weighted.dijkstra_with_weight("kul", "uk"))
+    print(graph_weighted.dijkstra_with_weight("kul", "braz"))
     print(time.time() - now)
     return country_list
 
