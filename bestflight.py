@@ -106,7 +106,7 @@ class Graph:
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'TsWmwKFkn3hd8MMIDVEA')
 geolocator = Nominatim(user_agent = "wia2005")
 
-
+w_nz, w_jpn, w_aus, w_thai, w_usa, w_uk, w_ger, w_braz, w_haw, w_hk, w_sgp = 0
 kul = geolocator.geocode("kuala lumpur malaysia")
 nz = geolocator.geocode("new zealand")
 jpn = geolocator.geocode("japan")
@@ -136,46 +136,75 @@ sgpcoordinate = (sgp.latitude, sgp.longitude)
 ##GETTING DISTANCE BETWEEN DISTANCE
 ##WILL BE USED FOR CALCULATING AND OBTAINING SHORTEST DISTANCE USING DIJKSTRA'S ALGORITHM
 graph = Graph([
-    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers  ),
-    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers  ),
-    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers ),
-    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers ),
-    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers ),
-    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers ),
-    ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers ),
-    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers ),
-    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers ),
-    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers ),
-    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers),
-    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers),
-    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers),
-    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers ),
-    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers ),
-    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers ),
-    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers ),
-    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers ),
-    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers ),
-    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers ),
-    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers ),
-    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers ),
-    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers ),
-    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers ),
-    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers ),
-    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers ),
-    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers ),
-    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers ),
-    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers),
-    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers ),
-    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)] )
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers + w_thai),
+    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers + w_hk),
+    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers + w_nz),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers + w_ger),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers + w_haw),
+    ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers + w_hk),
+    ("hk", "thai", geodesic(hkcoordinate, thaicoordinate).kilometers + w_thai),
+    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers + w_nz),
+    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers + w_ger),
+    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers + w_haw),
+    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers) + w_sgp,
+    ("sgp", "hk", geodesic(sgpcoordinate, hkcoordinate).kilometers) + w_hk,
+    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers + w_nz),
+    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers + w_ger),
+    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers + w_haw),
+    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers + w_usa),
+    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers + w_ger),
+    ("nz", "thai", geodesic(nzcoordinate, thaicoordinate).kilometers + w_thai),
+    ("nz", "hk", geodesic(nzcoordinate, hkcoordinate).kilometers + w_hk),
+    ("nz", "sgp", geodesic(nzcoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers + w_jpn),
+    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers + w_usa),
+    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers + w_haw),
+    ("ger", "thai", geodesic(gercoordinate, thaicoordinate).kilometers + w_thai),
+    ("ger", "hk", geodesic(gercoordinate, hkcoordinate).kilometers + w_hk),
+    ("ger", "sgp", geodesic(gercoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers + w_nz),
+    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers + w_usa),
+    ("haw", "thai", geodesic(hawcoordinate, thaicoordinate).kilometers + w_thai),
+    ("haw", "hk", geodesic(hawcoordinate, hkcoordinate).kilometers + w_hk),
+    ("haw", "sgp", geodesic(hawcoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("haw", "ger", geodesic(hawcoordinate, gercoordinate).kilometers + w_ger),
+    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers + w_aus),
+    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers + w_uk),
+    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers + w_braz),
+    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers + w_usa),
+    ("jpn", "nz", geodesic(jpncoordinate, nzcoordinate).kilometers + w_nz),
+    ("jpn", "ger", geodesic(jpncoordinate, gercoordinate).kilometers + w_ger),
+    ("jpn", "haw", geodesic(jpncoordinate, hawcoordinate).kilometers + w_haw),
+    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers + w_aus),
+    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers + w_uk),
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers+w_braz),
+    ("usa", "nz", geodesic(usacoordinate, nzcoordinate).kilometers + w_nz),
+    ("usa", "ger", geodesic(usacoordinate, gercoordinate).kilometers + w_ger),
+    ("usa", "haw", geodesic(usacoordinate, hawcoordinate).kilometers + w_haw),
+    ("usa", "jpn", geodesic(usacoordinate, jpncoordinate).kilometers + w_jpn),
+    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers + w_uk),
+    ("aus", "jpn", geodesic(auscoordinate, jpncoordinate).kilometers + w_jpn),
+    ("aus", "usa", geodesic(auscoordinate, usacoordinate).kilometers + w_usa),
+    ("uk", "jpn", geodesic(ukcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("uk", "usa", geodesic(ukcoordinate, usacoordinate).kilometers + w_usa),
+    ("uk", "aus", geodesic(ukcoordinate, auscoordinate).kilometers + w_aus),
+    ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers+w_braz),
+    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers + w_uk),
+    ("braz", "jpn", geodesic(brazcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers + w_usa)])
 
 
 ########################################################################################################################
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
-def callHEREMAPS(list):
-    for i in list:
-        mapsweb = webbrowser.open_new("https://tkchui.github.io/algomap/map1.html?path=" + str(list[i]))
+def callHEREMAPS(location1, location2):
+    mapsweb = webbrowser.open_new("https://tkchui.github.io/algomap/map1.html?path=" + str(location1) + "," + str(location2))
 
+
+callHEREMAPS("Australia", "United States")
 
 
 ########################################################################################################################
@@ -315,13 +344,74 @@ def rabin_karp(pattern, file_name):
 
 
 
-
 ########################################################################################################################
 ##WEIGHTING POLITICAL SENTIMENT INTO DATA
+graph_weighted = Graph([
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers + w_thai),
+    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers + w_hk),
+    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers + w_nz),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers + w_ger),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers + w_haw),
+    ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers + w_hk),
+    ("hk", "thai", geodesic(hkcoordinate, thaicoordinate).kilometers + w_thai),
+    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers + w_nz),
+    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers + w_ger),
+    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers + w_haw),
+    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers) + w_sgp,
+    ("sgp", "hk", geodesic(sgpcoordinate, hkcoordinate).kilometers) + w_hk,
+    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers + w_nz),
+    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers + w_ger),
+    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers + w_haw),
+    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers + w_usa),
+    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers + w_ger),
+    ("nz", "thai", geodesic(nzcoordinate, thaicoordinate).kilometers + w_thai),
+    ("nz", "hk", geodesic(nzcoordinate, hkcoordinate).kilometers + w_hk),
+    ("nz", "sgp", geodesic(nzcoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers + w_jpn),
+    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers + w_usa),
+    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers + w_haw),
+    ("ger", "thai", geodesic(gercoordinate, thaicoordinate).kilometers + w_thai),
+    ("ger", "hk", geodesic(gercoordinate, hkcoordinate).kilometers + w_hk),
+    ("ger", "sgp", geodesic(gercoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers + w_nz),
+    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers + w_usa),
+    ("haw", "thai", geodesic(hawcoordinate, thaicoordinate).kilometers + w_thai),
+    ("haw", "hk", geodesic(hawcoordinate, hkcoordinate).kilometers + w_hk),
+    ("haw", "sgp", geodesic(hawcoordinate, sgpcoordinate).kilometers + w_sgp),
+    ("haw", "ger", geodesic(hawcoordinate, gercoordinate).kilometers + w_ger),
+    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers + w_aus),
+    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers + w_uk),
+    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers + w_braz),
+    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers + w_usa),
+    ("jpn", "nz", geodesic(jpncoordinate, nzcoordinate).kilometers + w_nz),
+    ("jpn", "ger", geodesic(jpncoordinate, gercoordinate).kilometers + w_ger),
+    ("jpn", "haw", geodesic(jpncoordinate, hawcoordinate).kilometers + w_haw),
+    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers + w_aus),
+    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers + w_uk),
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers + w_braz),
+    ("usa", "nz", geodesic(usacoordinate, nzcoordinate).kilometers + w_nz),
+    ("usa", "ger", geodesic(usacoordinate, gercoordinate).kilometers + w_ger),
+    ("usa", "haw", geodesic(usacoordinate, hawcoordinate).kilometers + w_haw),
+    ("usa", "jpn", geodesic(usacoordinate, jpncoordinate).kilometers + w_jpn),
+    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers + w_uk),
+    ("aus", "jpn", geodesic(auscoordinate, jpncoordinate).kilometers + w_jpn),
+    ("aus", "usa", geodesic(auscoordinate, usacoordinate).kilometers + w_usa),
+    ("uk", "jpn", geodesic(ukcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("uk", "usa", geodesic(ukcoordinate, usacoordinate).kilometers + w_usa),
+    ("uk", "aus", geodesic(ukcoordinate, auscoordinate).kilometers + w_aus),
+    ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers + w_braz),
+    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers + w_uk),
+    ("braz", "jpn", geodesic(brazcoordinate, jpncoordinate).kilometers + w_jpn),
+    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers + w_usa)])
+
+
+
+
+########################################################################################################################
 ##PROBABILITY OF RANDOM ROUTES
-
-
-
 
 
 
@@ -330,12 +420,11 @@ def rabin_karp(pattern, file_name):
 ########################################################################################################################
 def main():
     print("Before adding weight of political sentiment, list of destinations: ")
-    print(graph.dijkstra("kul", "usa"))
-    callHEREMAPS(graph.dijkstra("kul", "usa"))
+    print(graph.dijkstra("kul", "us"))
     print(graph.dijkstra("kul", "ger"))
     print(graph.dijkstra("kul", "uk"))
     print(graph.dijkstra("kul", "braz"))
-"""
+
     now = time.time()
     country_list = {}
     for i in os.listdir("news"):
@@ -356,8 +445,12 @@ def main():
 
 
     print("After adding weight of political sentiment, list of destinations: ")
-
+    print(graph_weighted.dijkstra("kul", "us"))
+    print(graph_weighted.dijkstra("kul", "ger"))
+    print(graph_weighted.dijkstra("kul", "uk"))
+    print(graph_weighted.dijkstra("kul", "braz"))
+    print(time.time() - now)
     return country_list
-"""
+
 if __name__ == "__main__":
     main()
