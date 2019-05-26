@@ -335,6 +335,7 @@ def plot_sentiment(newspaper_list, name):
     num = [i for i in range(len(newspaper_list))]
     positive = [newspaper.get_sum("positive") for newspaper in newspaper_list]
     negative = [newspaper.get_sum("negative") for newspaper in newspaper_list]
+    weight_list.append(name, Newspaper.positive, Newspaper.negative)
 
     trace1 = go.Bar(
         x=num,
@@ -381,6 +382,7 @@ def rabin_karp(pattern, file_name):
 ########################################################################################################################
 ##WEIGHTING POLITICAL SENTIMENT INTO DATA
 
+def getWeight():
 
 
 
