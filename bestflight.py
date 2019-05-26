@@ -2,11 +2,9 @@ from collections import deque, namedtuple
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
-import plotly.plotly as py
-import plotly.graph_objs as go
 from matching import main
+from matching import Newspaper
 import os
-import string
 import time
 import webbrowser
 
@@ -311,152 +309,13 @@ def callHEREMAPS(locationlist):
         mapsweb + str(locationlist.pop()) + ","
     webbrowser.open_new(mapsweb)
 
-########################################################################################################################
-##EXTRACTING WORDS
-##PLOT BAR GRAPHS OF POSITIVE AND NEGATIVE WORDS BASED ON EACH NEWS
-##WORD COUNT AND STOPS WORD
-
-
-trans_table = str.maketrans(string.punctuation + string.ascii_uppercase,
-                            " " * len(string.punctuation) + string.ascii_lowercase)
-
-
-def get_word_from_file(word):
-    word = word.translate(trans_table)
-    return word.split()
-
-
-class Newspaper:
-    def __init__(self, name, file):
-        self.country = name
-        self.word_list = get_word_from_file(file)
-
-        self.word_dict = {}
-        self.stop_dict = {}
-        self.positive = {}
-        self.neutral = {}
-        self.negative = {}
-
-    def generate_word_stop(self):
-        """
-        This is used to generate dict for word frequency.
-        :return: None
-        """
-        for word in self.word_list:
-            if not rabin_karp(word, "stop_word.txt"):
-                if word in self.word_dict:
-                    self.word_dict[word] += 1
-                else:
-                    self.word_dict[word] = 1
-            elif len(word) > 1:
-                if word in self.stop_dict:
-                    self.stop_dict[word] += 1
-                else:
-                    self.stop_dict[word] = 1
-
-    def generate_sentiment(self):
-        """
-        This is used to generate dict for word frequency.
-        :return: None
-        """
-        for word, value in self.word_dict.items():
-            if rabin_karp(word, "positive_words.txt"):
-                self.positive[word] = value
-
-            if rabin_karp(word, "negative_words.txt"):
-                self.negative[word] = value
-
-    def get_sum(self, name):
-        attr = getattr(self, name)
-        return sum(attr.values())
-
-
-def plot_count(country_list):
-    country_name = []
-    country_stop = []
-    country_word = []
-
-    for name, newspapers in country_list.items():
-        country_stop.append(sum(newspaper.get_sum("stop_dict") for newspaper in newspapers))
-        country_word.append(sum(newspaper.get_sum("word_dict") for newspaper in newspapers))
-        country_name.append(name)
-
-    trace1 = go.Bar(
-        x=country_name,
-        y=country_word,
-        name='Word Count'
-    )
-    trace2 = go.Bar(
-        x=country_name,
-        y=country_stop,
-        name='Stop Count'
-    )
-
-    data = [trace1, trace2]
-    layout = go.Layout(
-        barmode='group'
-    )
-
-    fig = go.Figure(data=data, layout=layout)
-    py.plot(fig, filename='grouped-bar')
-
-
-def plot_sentiment(newspaper_list, name):
-    num = [i for i in range(len(newspaper_list))]
-    positive = [newspaper.get_sum("positive") for newspaper in newspaper_list]
-    negative = [newspaper.get_sum("negative") for newspaper in newspaper_list]
-    weight_list.append(name, Newspaper.positive, Newspaper.negative)
-
-    trace1 = go.Bar(
-        x=num,
-        y=positive,
-        name='Positive'
-    )
-    trace2 = go.Bar(
-        x=num,
-        y=negative,
-        name='Negative'
-    )
-
-    data = [trace1, trace2]
-    layout = go.Layout(
-        barmode='group'
-    )
-
-    fig = go.Figure(data=data, layout=layout)
-    py.plot(fig, filename=name)
-
-
-def rabin_karp(pattern, file_name):
-    words = open(file_name).read().translate(trans_table)
-    length = len(pattern)
-    hpattern = hash(pattern)
-
-    is_matched = False
-    for i in range(0, len(words) - length):
-        hword = hash(words[i:length + i])
-        if hword == hpattern:
-            if pattern == words[i:length + i]:
-                is_matched = True
-                break
-
-    return is_matched
-
-
-########################################################################################################################
-##HISTOGRAMS OF POSITIVE AND NEGATIVE WORDS
-
-
-
 
 ########################################################################################################################
 ##WEIGHTING POLITICAL SENTIMENT INTO DATA
 
 def getWeight(neighborCode):
-    for countryCode, pos, neg in weight_list:
-        if neighborCode == countryCode:
-            sentiment =  pos/(pos + neg)
-        return sentiment
+    weight = country_list[neighborCode].count_sentiment
+    return weight
 
 
 ########################################################################################################################
@@ -473,8 +332,16 @@ def main():
     print(graph.dijkstra("kul", "ger"))
     print(graph.dijkstra("kul", "uk"))
     print(graph.dijkstra("kul", "braz"))
+    print("After adding weight of political sentiment, list of destinations: ")
+    print(graph_weighted.dijkstra_with_weight("kul", "usa"))
+    print(graph_weighted.dijkstra_with_weight("kul", "ger"))
+    print(graph_weighted.dijkstra_with_weight("kul", "uk"))
+    print(graph_weighted.dijkstra_with_weight("kul", "braz"))
 
-    now = time.time()
+
+
+
+""" now = time.time()
     country_list = {}
     for i in os.listdir("news"):
         # Read everything
@@ -490,17 +357,9 @@ def main():
 
     plot_count(country_list)
     for name, newspaper_list in country_list.items():
-        plot_sentiment(newspaper_list, name)
+        plot_sentiment(newspaper_list, name) """
 
-
-
-    print("After adding weight of political sentiment, list of destinations: ")
-    print(graph_weighted.dijkstra_with_weight("kul", "usa"))
-    print(graph_weighted.dijkstra_with_weight("kul", "ger"))
-    print(graph_weighted.dijkstra_with_weight("kul", "uk"))
-    print(graph_weighted.dijkstra_with_weight("kul", "braz"))
-    print(time.time() - now)
-    return country_list
-
+  #  return country_list
+#  print(time.time() - now)
 if __name__ == "__main__":
     main()
