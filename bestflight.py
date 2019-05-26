@@ -2,7 +2,7 @@ from collections import deque, namedtuple
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
-#from matching import main
+from matching import main
 from matching import Newspaper
 import os
 import time
@@ -170,7 +170,7 @@ hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
 
 
-#country_list = main()
+country_list = main()
 
 ########################################################################################################################
 ##GETTING DISTANCE BETWEEN DISTANCE
