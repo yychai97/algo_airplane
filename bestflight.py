@@ -100,6 +100,7 @@ class Graph:
             current_vertex = previous_vertices[current_vertex]
         if path:
             path.appendleft(current_vertex)
+        callHEREMAPS(path)
         return path
 
     def dijkstra_with_weight(self, source, dest):
@@ -129,6 +130,7 @@ class Graph:
             current_vertex = previous_vertices[current_vertex]
         if path:
             path.appendleft(current_vertex)
+        callHEREMAPS(path)
         return path
 
 
@@ -172,39 +174,14 @@ country_list = main()
 ##WILL BE USED FOR CALCULATING AND OBTAINING SHORTEST DISTANCE USING DIJKSTRA'S ALGORITHM
 
 graph = Graph([
-    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers*country_list["Thailand"].count_sentiment()),
+    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
     ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
     ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
-    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
-    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
-    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
+    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate),
+    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate),
     ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
-
-    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
-    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
-    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
-    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers),
-    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers*country_list["newzealand"].count_sentiment()),
-    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
-    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
-    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers*country_list["Janpan"].count_sentiment()),
-    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
-    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers*country_list["germany"].count_sentiment()),
-    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers*country_list["Japan"].count_sentiment()),
-    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
-    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers*country_list["hawaii"].count_sentiment()),
-    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers*country_list["Japan"].count_sentiment()),
-    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
-    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers*country_list["australia"].count_sentiment()),
-    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
-    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers),
-    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers*country_list["Unitedstates"].count_sentiment()),
-    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers*country_list["australia"].count_sentiment()),
-    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
-    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
-    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers*country_list["UK"].count_sentiment()),
-    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers)])
-
+    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers),
     ("hk", "thai", geodesic(hkcoordinate, thaicoordinate).kilometers),
     ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers),
     ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers),
@@ -263,11 +240,11 @@ graph = Graph([
 ########################################################################################################################
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
-def callHEREMAPS(location1, location2):
-    mapsweb = webbrowser.open_new("https://tkchui.github.io/algomap/map1.html?path=" + str(location1) + "," + str(location2))
+def callHEREMAPS(locationlist):
+    mapsweb = webbrowser.open_new("https://tkchui.github.io/algomap/map1.html?path=" + locationlist)
 
 
-callHEREMAPS("Australia", "United States")
+
 
 
 ########################################################################################################################
@@ -412,8 +389,8 @@ def rabin_karp(pattern, file_name):
 ##WEIGHTING POLITICAL SENTIMENT INTO DATA
 
 def getWeight(neighborCode):
-    for neighborCode, pos, neg in weight_list:
-        if neighborCode == weight_list:
+    for countryCode, pos, neg in weight_list:
+        if neighborCode == countryCode:
             sentiment =  pos/(pos + neg)
         return sentiment
 
