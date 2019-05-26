@@ -50,6 +50,7 @@ class Newspaper:
         self.word_dict = {}
         self.stop_dict = {}
         self.positive = {}
+        self.neutral = {}
         self.negative = {}
 
     def generate_word_stop(self):
