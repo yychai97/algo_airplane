@@ -2,11 +2,12 @@ from collections import deque, namedtuple
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
-from matching import main
+#from matching import main
 from matching import Newspaper
 import os
 import time
 import webbrowser
+import copy
 
 
 
@@ -98,8 +99,10 @@ class Graph:
             current_vertex = previous_vertices[current_vertex]
         if path:
             path.appendleft(current_vertex)
-        callHEREMAPS(path)
+        mappath = path.copy()
+        callHEREMAPS(mappath)
         return path
+
 
     def dijkstra_with_weight(self, source, dest):
         assert source in self.vertices, 'Such source node doesn\'t exist'
@@ -117,7 +120,8 @@ class Graph:
             if distances[current_vertex] == inf:
                 break
             for neighbour, cost in self.neighbours[current_vertex]:
-                alternative_route = distances[current_vertex] + cost + getWeight(neighbour)
+                newWeight = getWeight(neighbour)
+                alternative_route = distances[current_vertex] + cost + newWeight
                 if alternative_route < distances[neighbour]:
                     distances[neighbour] = alternative_route
                     previous_vertices[neighbour] = current_vertex
@@ -128,7 +132,8 @@ class Graph:
             current_vertex = previous_vertices[current_vertex]
         if path:
             path.appendleft(current_vertex)
-        callHEREMAPS(path)
+        mappath = path.copy()
+        callHEREMAPS(mappath)
         return path
 
 
@@ -165,7 +170,7 @@ hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
 
 
-country_list = main()
+#country_list = main()
 
 ########################################################################################################################
 ##GETTING DISTANCE BETWEEN DISTANCE
@@ -302,12 +307,8 @@ graph_weighted = Graph([
 
 def callHEREMAPS(locationlist):
     mapsweb = "https://tkchui.github.io/algomap/map1.html?path="
-    for i in list(locationlist):
-        if i == len(locationlist)-1:
-            mapsweb + str(locationlist.pop())
-            break
-        mapsweb + str(locationlist.pop()) + ","
-    webbrowser.open_new(mapsweb)
+    newmapsweb = mapsweb + ",".join(locationlist)
+    webbrowser.open_new(newmapsweb)
 
 
 ########################################################################################################################
