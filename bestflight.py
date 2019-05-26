@@ -17,6 +17,8 @@ inf = float('inf')
 Edge = namedtuple('Edge', 'start, end, cost')
 
 
+weight_list = []
+
 def make_edge(start, end, cost=1):
   return Edge(start, end, cost)
 
