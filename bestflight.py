@@ -340,12 +340,15 @@ def main():
     print(graph.dijkstra("kul", "ger"))
     print(graph.dijkstra("kul", "uk"))
     print(graph.dijkstra("kul", "braz"))
+    print(graph.dijkstra("kul", "jpn"))
+    print(graph.dijkstra("kul", "aus"))
     print("After adding weight of political sentiment, list of destinations: ")
     print(graph_weighted.dijkstra_with_weight("kul", "usa"))
     print(graph_weighted.dijkstra_with_weight("kul", "ger"))
     print(graph_weighted.dijkstra_with_weight("kul", "uk"))
     print(graph_weighted.dijkstra_with_weight("kul", "braz"))
-
+    print(graph_weighted.dijkstra_with_weight("kul", "jpn"))
+    print(graph_weighted.dijkstra_with_weight("kul", "aus"))
 
 
 
