@@ -35,6 +35,7 @@ class Graph:
 
         self.edges = [make_edge(*edge) for edge in edges]
 
+
     @property
     def vertices(self):
         return set(
@@ -136,6 +137,25 @@ class Graph:
         mappath = path.copy()
         return path
 
+    def list_possible_route(self, src, dest):
+        self.possible_route = []
+        small_list = [(src, 0)]
+        for node in self.neighbours[src]:
+            self.list_recursive(node, small_list, src, dest)
+        return self.possible_route
+
+    def list_recursive(self, node, small_list, src, dest):
+        new_list = small_list + [node]
+        # name, distance = node
+        if node[0] == dest:
+            self.possible_route.append(new_list)
+            return
+        for name, distance in self.neighbours[node[0]]:
+            if name == src or (name in [i[0] for i in new_list]):
+                pass
+            else:
+                self.list_recursive((name, distance), new_list, src, dest)
+
 
 ##---------------------------------------------------------------------------------------------------------##
 ##OBTAINING COORDINATES FOR CITIES
@@ -171,7 +191,7 @@ hawcoordinate = (haw.latitude, haw.longitude)
 hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
 
-country_list = main()
+#country_list = main()
 
 ########################################################################################################################
 ##GETTING DISTANCE BETWEEN DISTANCE
@@ -237,8 +257,8 @@ graph = Graph([
     ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers),
     ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers),
     ("braz", "jpn", geodesic(brazcoordinate, jpncoordinate).kilometers),
-    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers)], country_list=country_list)
-
+    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers)], country_list=None)
+graph.list_possible_route("kul", "uk")
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
 def callHEREMAPS(locationlist):
