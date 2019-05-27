@@ -19,13 +19,14 @@ inf = float('inf')
 Edge = namedtuple('Edge', 'start, end, cost')
 
 weight_list = []
+overallsum = 0
 
 
 def make_edge(start, end, cost=1):
     return Edge(start, end, cost)
 
-
 class Graph:
+
     def __init__(self, edges, country_list):
         # let's check that the data is right
         self.country_list = country_list
@@ -237,10 +238,11 @@ def callHEREMAPS(locationlist):
 
 ########################################################################################################################
 ##PROBABILITY OF RANDOM ROUTES
-def probability_routes(totaldistance_route, totaldistance_allpath, a_graph, src, dest):
-    totaldistance_allpath = get_total_distance(a_graph, src, dest)
-    probability_oneroute = (1 / totaldistance_route) / (1 / totaldistance_allpath)
+def probability_routes(sumofpath, overallsum):
+    print("Probability of route: ")
+    probability_oneroute = (sumofpath/ overallsum)
     return probability_oneroute
+
 
 
 def get_total_distance(a_graph, src, dest):
@@ -250,14 +252,17 @@ def get_total_distance(a_graph, src, dest):
 
 def get_distance_from_list(a_list):
     name_list = []
+    global overallsum
     sum = 0
     for name, distance in a_list:
         name_list.append(name)
         sum += distance
-
+    overallsum += sum
     print("Route: ", name_list)
     print("Total distance:", sum)
+    print("------------------------------------------")
     return sum
+
 
 
 ########################################################################################################################
@@ -266,6 +271,7 @@ def get_distance_from_list(a_list):
 #  print(time.time() - now)
 if __name__ == "__main__":
     print(get_total_distance(graph, "kul", "usa"))
+    print()
     print("Before adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra("kul", "usa"))
     print(graph.dijkstra("kul", "ger"))
