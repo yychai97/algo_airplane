@@ -56,6 +56,7 @@ class Graph:
         for edge in edges:
             if [edge.start, edge.end] in node_pairs:
                 self.edges.remove(edge)
+                return edge
 
     def add_edge(self, n1, n2, cost=1, both_ends=True):
         node_pairs = self.get_node_pairs(n1, n2, both_ends)
@@ -103,7 +104,7 @@ class Graph:
         if path:
             path.appendleft(current_vertex)
         mappath = path.copy()
-        callHEREMAPS(mappath)
+        #callHEREMAPS(mappath)
         return path
 
     def dijkstra_with_weight(self, source, dest):
@@ -122,10 +123,11 @@ class Graph:
             if distances[current_vertex] == inf:
                 break
             for neighbour, cost in self.neighbours[current_vertex]:
-                alternative_route = self.country_list[neighbour].count_sentiment() * distances[current_vertex] + cost
-                if alternative_route < distances[neighbour]:
-                    distances[neighbour] = alternative_route
-                    previous_vertices[neighbour] = current_vertex
+                if neighbour != 'kul':
+                    alternative_route = self.country_list[neighbour].count_sentiment() * distances[current_vertex] + cost
+                    if alternative_route < distances[neighbour]:
+                        distances[neighbour] = alternative_route
+                        previous_vertices[neighbour] = current_vertex
 
         path, current_vertex = deque(), dest
         while previous_vertices[current_vertex] is not None:
@@ -252,7 +254,10 @@ def callHEREMAPS(locationlist):
 
 
 ########################################################################################################################
-def main():
+
+
+#  print(time.time() - now)
+if __name__ == "__main__":
     print("Before adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra("kul", "usa"))
     print(graph.dijkstra("kul", "ger"))
@@ -267,8 +272,3 @@ def main():
     print(graph.dijkstra_with_weight("kul", "braz"))
     print(graph.dijkstra_with_weight("kul", "jpn"))
     print(graph.dijkstra_with_weight("kul", "aus"))
-
-
-#  print(time.time() - now)
-if __name__ == "__main__":
-    main()
