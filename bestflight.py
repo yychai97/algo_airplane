@@ -248,9 +248,7 @@ graph = Graph([
     ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers),
     ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers),
     ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers),
-    ("ger", "braz", geodesic(gercoordinate, brazcoordinate).kilometers)])
-
-country_list=country_list
+    ("ger", "braz", geodesic(gercoordinate, brazcoordinate).kilometers)], country_list=country_list)
 
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
