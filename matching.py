@@ -3,6 +3,7 @@ import string
 import plotly.plotly as py
 import plotly.graph_objs as go
 import time
+from concurrent import futures
 
 trans_table = str.maketrans(string.punctuation + string.ascii_uppercase,
                             " " * len(string.punctuation) + string.ascii_lowercase)
@@ -28,8 +29,7 @@ class Country:
             self.sentiment["positive"] = sum(newspaper.get_sum("positive") for newspaper in self.newspaper_list)
             self.sentiment["negative"] = sum(newspaper.get_sum("negative") for newspaper in self.newspaper_list)
 
-        return (self.sentiment["positive"] - self.sentiment["negative"]) / \
-               (self.sentiment["positive"] + self.sentiment["negative"])
+        return (self.sentiment["positive"]) * (-1.15) + (self.sentiment["negative"]) * 1.5
 
     def count_word_stop(self):
         if len(self.word) == 0:
@@ -70,17 +70,30 @@ class Newspaper:
                 else:
                     self.stop_dict[word] = 1
 
-    def generate_sentiment(self):
+    def process_sentiment(self):
+        max_worker = min(len(self.word_dict), 20)
+        with futures.ThreadPoolExecutor(max_worker) as executor:
+            to_do = []
+            for word_list in self.word_dict.keys():
+                future = executor.submit(self._generate_sentiment, word_list)
+                to_do.append(future)
+
+            results = []
+            for future in futures.as_completed(to_do):
+                res = future.result()
+                print(future)
+                results.append(res)
+
+
+    def _generate_sentiment(self, word):
         """
         This is used to generate dict for word frequency.
         :return: None
         """
-        for word, value in self.word_dict.items():
-            if rabin_karp(word, "positive_words.txt"):
-                self.positive[word] = value
-
-            if rabin_karp(word, "negative_words.txt"):
-                self.negative[word] = value
+        if rabin_karp(word, "positive_words.txt"):
+            self.positive[word] = self.word_dict[word]
+        if rabin_karp(word, "negative_words.txt"):
+            self.negative[word] = self.word_dict[word]
 
     def get_sum(self, name):
         attr = getattr(self, name)
@@ -170,7 +183,7 @@ def main():
         news = Newspaper(country_name, f.read())
         f.close()
         news.generate_word_stop()
-        news.generate_sentiment()
+        news.process_sentiment()
         country.add_newspaper(news)
         country_list[country_name] = country
     # plot_count(country_list)
@@ -178,6 +191,7 @@ def main():
     #     plot_sentiment(newspaper_list, name)
     print(time.time() - now)
     return country_list
+
 
 
 if __name__ == "__main__":

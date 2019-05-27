@@ -1,32 +1,34 @@
 from collections import deque, namedtuple
+
+import geopy
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
-import plotly.plotly as py
-import plotly.graph_objs as go
 from matching import main
+from matching import Newspaper
 import os
-import string
 import time
 import webbrowser
-
-
+import ssl
+import certifi
+import copy
 
 ##DIJSKTRA ALGORITHM for calculation
 # we'll use infinity as a default distance to nodes.
 inf = float('inf')
 Edge = namedtuple('Edge', 'start, end, cost')
 
-
 weight_list = []
 
+
 def make_edge(start, end, cost=1):
-  return Edge(start, end, cost)
+    return Edge(start, end, cost)
 
 
 class Graph:
-    def __init__(self, edges):
+    def __init__(self, edges, country_list):
         # let's check that the data is right
+        self.country_list = country_list
         wrong_edges = [i for i in edges if len(i) not in [2, 3]]
         if wrong_edges:
             raise ValueError('Wrong edges data: {}'.format(wrong_edges))
@@ -100,7 +102,8 @@ class Graph:
             current_vertex = previous_vertices[current_vertex]
         if path:
             path.appendleft(current_vertex)
-        callHEREMAPS(path)
+        mappath = path.copy()
+        callHEREMAPS(mappath)
         return path
 
     def dijkstra_with_weight(self, source, dest):
@@ -119,7 +122,7 @@ class Graph:
             if distances[current_vertex] == inf:
                 break
             for neighbour, cost in self.neighbours[current_vertex]:
-                alternative_route = distances[current_vertex] + cost + getWeight(neighbour)
+                alternative_route = self.country_list[neighbour].count_sentiment() * distances[current_vertex] + cost
                 if alternative_route < distances[neighbour]:
                     distances[neighbour] = alternative_route
                     previous_vertices[neighbour] = current_vertex
@@ -130,16 +133,18 @@ class Graph:
             current_vertex = previous_vertices[current_vertex]
         if path:
             path.appendleft(current_vertex)
-        callHEREMAPS(path)
+        mappath = path.copy()
         return path
-
-
 
 
 ##---------------------------------------------------------------------------------------------------------##
 ##OBTAINING COORDINATES FOR CITIES
-plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'TsWmwKFkn3hd8MMIDVEA')
-geolocator = Nominatim(user_agent = "wia2005")
+plotly.tools.set_credentials_file(username='yychai97', api_key='TsWmwKFkn3hd8MMIDVEA')
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+geopy.geocoders.options.default_ssl_context = ctx
+geolocator = Nominatim(user_agent="algo_airplane")
 
 kul = geolocator.geocode("kuala lumpur malaysia")
 nz = geolocator.geocode("new zealand")
@@ -165,7 +170,6 @@ brazcoordinate = (braz.latitude, braz.longitude)
 hawcoordinate = (haw.latitude, haw.longitude)
 hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
-
 
 country_list = main()
 
@@ -233,237 +237,18 @@ graph = Graph([
     ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers),
     ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers),
     ("braz", "jpn", geodesic(brazcoordinate, jpncoordinate).kilometers),
-    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers)])
+    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers)], country_list=country_list)
 
-graph_weighted = Graph([
-    ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
-    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
-    ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
-    ("thai", "nz", geodesic(thaicoordinate, nzcoordinate).kilometers),
-    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers),
-    ("thai", "haw", geodesic(thaicoordinate, hawcoordinate).kilometers),
-    ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
-    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers),
-    ("hk", "thai", geodesic(hkcoordinate, thaicoordinate).kilometers),
-    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers),
-    ("hk", "ger", geodesic(hkcoordinate, gercoordinate).kilometers),
-    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers),
-    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers),
-    ("sgp", "hk", geodesic(sgpcoordinate, hkcoordinate).kilometers),
-    ("sgp", "nz", geodesic(sgpcoordinate, nzcoordinate).kilometers),
-    ("sgp", "ger", geodesic(sgpcoordinate, gercoordinate).kilometers),
-    ("sgp", "haw", geodesic(sgpcoordinate, hawcoordinate).kilometers),
-    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers),
-    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers),
-    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers),
-    ("nz", "thai", geodesic(nzcoordinate, thaicoordinate).kilometers),
-    ("nz", "hk", geodesic(nzcoordinate, hkcoordinate).kilometers),
-    ("nz", "sgp", geodesic(nzcoordinate, sgpcoordinate).kilometers),
-    ("ger", "jpn", geodesic(gercoordinate, jpncoordinate).kilometers),
-    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers),
-    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers),
-    ("ger", "thai", geodesic(gercoordinate, thaicoordinate).kilometers),
-    ("ger", "hk", geodesic(gercoordinate, hkcoordinate).kilometers),
-    ("ger", "sgp", geodesic(gercoordinate, sgpcoordinate).kilometers),
-    ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers),
-    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers),
-    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers),
-    ("haw", "thai", geodesic(hawcoordinate, thaicoordinate).kilometers),
-    ("haw", "hk", geodesic(hawcoordinate, hkcoordinate).kilometers),
-    ("haw", "sgp", geodesic(hawcoordinate, sgpcoordinate).kilometers),
-    ("haw", "ger", geodesic(hawcoordinate, gercoordinate).kilometers),
-    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers),
-    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers),
-    ("jpn", "braz", geodesic(jpncoordinate, brazcoordinate).kilometers),
-    ("jpn", "usa", geodesic(jpncoordinate, usacoordinate).kilometers),
-    ("jpn", "nz", geodesic(jpncoordinate, nzcoordinate).kilometers),
-    ("jpn", "ger", geodesic(jpncoordinate, gercoordinate).kilometers),
-    ("jpn", "haw", geodesic(jpncoordinate, hawcoordinate).kilometers),
-    ("usa", "aus", geodesic(usacoordinate, auscoordinate).kilometers),
-    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers),
-    ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers),
-    ("usa", "nz", geodesic(usacoordinate, nzcoordinate).kilometers),
-    ("usa", "ger", geodesic(usacoordinate, gercoordinate).kilometers),
-    ("usa", "haw", geodesic(usacoordinate, hawcoordinate).kilometers),
-    ("usa", "jpn", geodesic(usacoordinate, jpncoordinate).kilometers),
-    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers),
-    ("aus", "jpn", geodesic(auscoordinate, jpncoordinate).kilometers),
-    ("aus", "usa", geodesic(auscoordinate, usacoordinate).kilometers),
-    ("uk", "jpn", geodesic(ukcoordinate, jpncoordinate).kilometers),
-    ("uk", "usa", geodesic(ukcoordinate, usacoordinate).kilometers),
-    ("uk", "aus", geodesic(ukcoordinate, auscoordinate).kilometers),
-    ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers),
-    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers),
-    ("braz", "jpn", geodesic(brazcoordinate, jpncoordinate).kilometers),
-    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers)])
-
-
-
-########################################################################################################################
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
 def callHEREMAPS(locationlist):
     mapsweb = "https://tkchui.github.io/algomap/map1.html?path="
-    for i in locationlist:
-        if i == len(locationlist)-1:
-            mapsweb + str(locationlist.pop())
-            break
-        mapsweb + str(locationlist.pop()) + ","
-    webbrowser.open_new(mapsweb)
-
-########################################################################################################################
-##EXTRACTING WORDS
-##PLOT BAR GRAPHS OF POSITIVE AND NEGATIVE WORDS BASED ON EACH NEWS
-##WORD COUNT AND STOPS WORD
-
-
-trans_table = str.maketrans(string.punctuation + string.ascii_uppercase,
-                            " " * len(string.punctuation) + string.ascii_lowercase)
-
-
-def get_word_from_file(word):
-    word = word.translate(trans_table)
-    return word.split()
-
-
-class Newspaper:
-    def __init__(self, name, file):
-        self.country = name
-        self.word_list = get_word_from_file(file)
-
-        self.word_dict = {}
-        self.stop_dict = {}
-        self.positive = {}
-        self.neutral = {}
-        self.negative = {}
-
-    def generate_word_stop(self):
-        """
-        This is used to generate dict for word frequency.
-        :return: None
-        """
-        for word in self.word_list:
-            if not rabin_karp(word, "stop_word.txt"):
-                if word in self.word_dict:
-                    self.word_dict[word] += 1
-                else:
-                    self.word_dict[word] = 1
-            elif len(word) > 1:
-                if word in self.stop_dict:
-                    self.stop_dict[word] += 1
-                else:
-                    self.stop_dict[word] = 1
-
-    def generate_sentiment(self):
-        """
-        This is used to generate dict for word frequency.
-        :return: None
-        """
-        for word, value in self.word_dict.items():
-            if rabin_karp(word, "positive_words.txt"):
-                self.positive[word] = value
-
-            if rabin_karp(word, "negative_words.txt"):
-                self.negative[word] = value
-
-    def get_sum(self, name):
-        attr = getattr(self, name)
-        return sum(attr.values())
-
-
-def plot_count(country_list):
-    country_name = []
-    country_stop = []
-    country_word = []
-
-    for name, newspapers in country_list.items():
-        country_stop.append(sum(newspaper.get_sum("stop_dict") for newspaper in newspapers))
-        country_word.append(sum(newspaper.get_sum("word_dict") for newspaper in newspapers))
-        country_name.append(name)
-
-    trace1 = go.Bar(
-        x=country_name,
-        y=country_word,
-        name='Word Count'
-    )
-    trace2 = go.Bar(
-        x=country_name,
-        y=country_stop,
-        name='Stop Count'
-    )
-
-    data = [trace1, trace2]
-    layout = go.Layout(
-        barmode='group'
-    )
-
-    fig = go.Figure(data=data, layout=layout)
-    py.plot(fig, filename='grouped-bar')
-
-
-def plot_sentiment(newspaper_list, name):
-    num = [i for i in range(len(newspaper_list))]
-    positive = [newspaper.get_sum("positive") for newspaper in newspaper_list]
-    negative = [newspaper.get_sum("negative") for newspaper in newspaper_list]
-    weight_list.append(name, Newspaper.positive, Newspaper.negative)
-
-    trace1 = go.Bar(
-        x=num,
-        y=positive,
-        name='Positive'
-    )
-    trace2 = go.Bar(
-        x=num,
-        y=negative,
-        name='Negative'
-    )
-
-    data = [trace1, trace2]
-    layout = go.Layout(
-        barmode='group'
-    )
-
-    fig = go.Figure(data=data, layout=layout)
-    py.plot(fig, filename=name)
-
-
-def rabin_karp(pattern, file_name):
-    words = open(file_name).read().translate(trans_table)
-    length = len(pattern)
-    hpattern = hash(pattern)
-
-    is_matched = False
-    for i in range(0, len(words) - length):
-        hword = hash(words[i:length + i])
-        if hword == hpattern:
-            if pattern == words[i:length + i]:
-                is_matched = True
-                break
-
-    return is_matched
-
-
-########################################################################################################################
-##HISTOGRAMS OF POSITIVE AND NEGATIVE WORDS
-
-
-
-
-########################################################################################################################
-##WEIGHTING POLITICAL SENTIMENT INTO DATA
-
-def getWeight(neighborCode):
-    for countryCode, pos, neg in weight_list:
-        if neighborCode == countryCode:
-            sentiment =  pos/(pos + neg)
-        return sentiment
+    newmapsweb = mapsweb + ",".join(locationlist)
+    webbrowser.open_new(newmapsweb)
 
 
 ########################################################################################################################
 ##PROBABILITY OF RANDOM ROUTES
-
-
-
 
 
 ########################################################################################################################
@@ -473,34 +258,17 @@ def main():
     print(graph.dijkstra("kul", "ger"))
     print(graph.dijkstra("kul", "uk"))
     print(graph.dijkstra("kul", "braz"))
-
-    now = time.time()
-    country_list = {}
-    for i in os.listdir("news"):
-        # Read everything
-        country = i[:-6]
-        newspaper_list = country_list.setdefault(country, [])
-        f = open(os.path.join("news", i), encoding='ISO-8859-1')
-        news = Newspaper(country, f.read())
-        f.close()
-        news.generate_word_stop()
-        news.generate_sentiment()
-        newspaper_list.append(news)
-        country_list[country] = newspaper_list
-
-    plot_count(country_list)
-    for name, newspaper_list in country_list.items():
-        plot_sentiment(newspaper_list, name)
-
-
-
+    print(graph.dijkstra("kul", "jpn"))
+    print(graph.dijkstra("kul", "aus"))
     print("After adding weight of political sentiment, list of destinations: ")
-    print(graph_weighted.dijkstra_with_weight("kul", "usa"))
-    print(graph_weighted.dijkstra_with_weight("kul", "ger"))
-    print(graph_weighted.dijkstra_with_weight("kul", "uk"))
-    print(graph_weighted.dijkstra_with_weight("kul", "braz"))
-    print(time.time() - now)
-    return country_list
+    print(graph.dijkstra_with_weight("kul", "usa"))
+    print(graph.dijkstra_with_weight("kul", "ger"))
+    print(graph.dijkstra_with_weight("kul", "uk"))
+    print(graph.dijkstra_with_weight("kul", "braz"))
+    print(graph.dijkstra_with_weight("kul", "jpn"))
+    print(graph.dijkstra_with_weight("kul", "aus"))
 
+
+#  print(time.time() - now)
 if __name__ == "__main__":
     main()
