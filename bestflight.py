@@ -191,7 +191,7 @@ hawcoordinate = (haw.latitude, haw.longitude)
 hkcoordinate = (hk.latitude, hk.longitude)
 sgpcoordinate = (sgp.latitude, sgp.longitude)
 
-#country_list = main()
+country_list = main()
 
 ########################################################################################################################
 ##GETTING DISTANCE BETWEEN DISTANCE
@@ -200,74 +200,33 @@ sgpcoordinate = (sgp.latitude, sgp.longitude)
 graph = Graph([
     ("kul", "thai", geodesic(kulcoordinate, thaicoordinate).kilometers),
     ("kul", "sgp", geodesic(kulcoordinate, sgpcoordinate).kilometers),
+    ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
     ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
     ("thai", "jpn", geodesic(thaicoordinate, jpncoordinate).kilometers),
     ("thai", "aus", geodesic(thaicoordinate, auscoordinate).kilometers),
-    ("thai", "sgp", geodesic(thaicoordinate, sgpcoordinate).kilometers),
-    ("sgp", "hk", geodesic(sgpcoordinate, hkcoordinate).kilometers),
-    ("sgp", "jpn", geodesic(sgpcoordinate, jpncoordinate).kilometers),
+    ("thai", "uk", geodesic(thaicoordinate, ukcoordinate).kilometers),
     ("sgp", "aus", geodesic(sgpcoordinate, auscoordinate).kilometers),
-    ("hk", "thai", geodesic(hkcoordinate, thaicoordinate).kilometers),
-    ("hk", "sgp", geodesic(hkcoordinate, sgpcoordinate).kilometers),
     ("hk", "jpn", geodesic(hkcoordinate, jpncoordinate).kilometers),
-    ("hk", "aus", geodesic(hkcoordinate, auscoordinate).kilometers),
-    ("hk", "haw", geodesic(hkcoordinate, hawcoordinate).kilometers),
-    ("hk", "nz", geodesic(hkcoordinate, nzcoordinate).kilometers),
-    ("hk", "uk", geodesic(hkcoordinate, ukcoordinate).kilometers),
-    ("jpn", "thai", geodesic(jpncoordinate, thaicoordinate).kilometers),
-    ("jpn", "sgp", geodesic(jpncoordinate, sgpcoordinate).kilometers),
-    ("jpn", "hk", geodesic(jpncoordinate, hkcoordinate).kilometers),
-    ("jpn", "aus", geodesic(jpncoordinate, auscoordinate).kilometers),
     ("jpn", "haw", geodesic(jpncoordinate, hawcoordinate).kilometers),
     ("jpn", "nz", geodesic(jpncoordinate, nzcoordinate).kilometers),
-    ("jpn", "uk", geodesic(jpncoordinate, ukcoordinate).kilometers),
-    ("aus", "thai", geodesic(auscoordinate, thaicoordinate).kilometers),
-    ("aus", "sgp", geodesic(auscoordinate, sgpcoordinate).kilometers),
-    ("aus", "hk", geodesic(auscoordinate, hkcoordinate).kilometers),
-    ("aus", "jpn", geodesic(auscoordinate, jpncoordinate).kilometers),
-    ("aus", "haw", geodesic(auscoordinate, hawcoordinate).kilometers),
     ("aus", "nz", geodesic(auscoordinate, nzcoordinate).kilometers),
     ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers),
-    ("haw", "hk", geodesic(hawcoordinate, hkcoordinate).kilometers),
-    ("haw", "jpn", geodesic(hawcoordinate, jpncoordinate).kilometers),
-    ("haw", "aus", geodesic(hawcoordinate, auscoordinate).kilometers),
-    ("haw", "nz", geodesic(hawcoordinate, nzcoordinate).kilometers),
-    ("haw", "uk", geodesic(hawcoordinate, ukcoordinate).kilometers),
     ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers),
     ("haw", "braz", geodesic(hawcoordinate, brazcoordinate).kilometers),
-    ("haw", "ger", geodesic(hawcoordinate, gercoordinate).kilometers),
     ("nz", "hk", geodesic(nzcoordinate, hkcoordinate).kilometers),
-    ("nz", "jpn", geodesic(nzcoordinate, jpncoordinate).kilometers),
-    ("nz", "aus", geodesic(nzcoordinate, auscoordinate).kilometers),
     ("nz", "haw", geodesic(nzcoordinate, hawcoordinate).kilometers),
-    ("nz", "uk", geodesic(nzcoordinate, ukcoordinate).kilometers),
-    ("nz", "usa", geodesic(nzcoordinate, usacoordinate).kilometers),
     ("nz", "braz", geodesic(nzcoordinate, brazcoordinate).kilometers),
-    ("nz", "ger", geodesic(nzcoordinate, gercoordinate).kilometers),
-    ("uk", "hk", geodesic(ukcoordinate, hkcoordinate).kilometers),
-    ("uk", "jpn", geodesic(ukcoordinate, jpncoordinate).kilometers),
-    ("uk", "aus", geodesic(ukcoordinate, auscoordinate).kilometers),
-    ("uk", "haw", geodesic(ukcoordinate, hawcoordinate).kilometers),
-    ("uk", "nz", geodesic(ukcoordinate, nzcoordinate).kilometers),
     ("uk", "usa", geodesic(ukcoordinate, usacoordinate).kilometers),
     ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers),
-    ("uk", "ger", geodesic(ukcoordinate, gercoordinate).kilometers),
     ("usa", "haw", geodesic(usacoordinate, hawcoordinate).kilometers),
-    ("usa", "nz", geodesic(usacoordinate, nzcoordinate).kilometers),
-    ("usa", "uk", geodesic(usacoordinate, ukcoordinate).kilometers),
     ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers),
     ("usa", "ger", geodesic(usacoordinate, gercoordinate).kilometers),
     ("braz", "haw", geodesic(brazcoordinate, hawcoordinate).kilometers),
-    ("braz", "nz", geodesic(brazcoordinate, nzcoordinate).kilometers),
-    ("braz", "uk", geodesic(brazcoordinate, ukcoordinate).kilometers),
     ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers),
-    ("braz", "ger", geodesic(brazcoordinate, gercoordinate).kilometers),
     ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers),
     ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers),
-    ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers),
-    ("ger", "usa", geodesic(gercoordinate, usacoordinate).kilometers),
-    ("ger", "braz", geodesic(gercoordinate, brazcoordinate).kilometers)], country_list=country_list)
-graph.list_possible_route()
+    ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers)], country_list=country_list)
+
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
 def callHEREMAPS(locationlist):
@@ -278,6 +237,17 @@ def callHEREMAPS(locationlist):
 
 ########################################################################################################################
 ##PROBABILITY OF RANDOM ROUTES
+def probability_routes(totaldistance_route, totaldistance_allpath):
+    totaldistance_allpath = getOverallTotalDistance()
+    probability_oneroute = (1/totaldistance_route) / (1/totaldistance_allpath)
+    return probability_oneroute
+
+def getOverallTotalDistance():
+
+
+
+def getPathTotalDistance(src, des):
+
 
 
 ########################################################################################################################
@@ -285,6 +255,7 @@ def callHEREMAPS(locationlist):
 
 #  print(time.time() - now)
 if __name__ == "__main__":
+    print(graph.list_possible_route("kul", "uk"))
     print("Before adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra("kul", "usa"))
     print(graph.dijkstra("kul", "ger"))
