@@ -35,7 +35,6 @@ class Graph:
 
         self.edges = [make_edge(*edge) for edge in edges]
 
-
     @property
     def vertices(self):
         return set(
@@ -225,7 +224,8 @@ graph = Graph([
     ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers),
     ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers),
     ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers),
-    ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers)], country_list=country_list)
+    ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers)], country_list)
+
 
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
 
@@ -237,17 +237,27 @@ def callHEREMAPS(locationlist):
 
 ########################################################################################################################
 ##PROBABILITY OF RANDOM ROUTES
-def probability_routes(totaldistance_route, totaldistance_allpath):
-    totaldistance_allpath = getOverallTotalDistance()
-    probability_oneroute = (1/totaldistance_route) / (1/totaldistance_allpath)
+def probability_routes(totaldistance_route, totaldistance_allpath, a_graph, src, dest):
+    totaldistance_allpath = get_total_distance(a_graph, src, dest)
+    probability_oneroute = (1 / totaldistance_route) / (1 / totaldistance_allpath)
     return probability_oneroute
 
-def getOverallTotalDistance():
+
+def get_total_distance(a_graph, src, dest):
+    a_graph.list_possible_route(src, dest)
+    return sum(get_distance_from_list(a_list) for a_list in a_graph.possible_route)
 
 
+def get_distance_from_list(a_list):
+    name_list = []
+    sum = 0
+    for name, distance in a_list:
+        name_list.append(name)
+        sum += distance
 
-def getPathTotalDistance(src, des):
-
+    print("Route: ", name_list)
+    print("Total distance:", sum)
+    return sum
 
 
 ########################################################################################################################
@@ -255,7 +265,7 @@ def getPathTotalDistance(src, des):
 
 #  print(time.time() - now)
 if __name__ == "__main__":
-    print(graph.list_possible_route("kul", "uk"))
+    print(get_total_distance(graph, "kul", "usa"))
     print("Before adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra("kul", "usa"))
     print(graph.dijkstra("kul", "ger"))
