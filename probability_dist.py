@@ -1,12 +1,11 @@
 
 
-def getNumberOfWords(positive_words, negative_words):
-    weight_postive = positive_words * 1.5
-    weight_negative = negative_words * 2.0
-    return  weight_postive, weight_negative
+def probability_routes(totaldistance_route, totaldistance_allpath):
+    probability_oneroute = (1/totaldistance_route) / (1/totaldistance_allpath)
+    return probability_oneroute
 
-def newScore(minDistance):
-    newscore = minDistance + getNumberOfWords()
+
+
 
     return newscore
 def main():
