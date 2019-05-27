@@ -29,7 +29,7 @@ class Country:
             self.sentiment["positive"] = sum(newspaper.get_sum("positive") for newspaper in self.newspaper_list)
             self.sentiment["negative"] = sum(newspaper.get_sum("negative") for newspaper in self.newspaper_list)
 
-        return 1 + self.sentiment["positive"]/(self.sentiment["positive"] + self.sentiment["negative"])
+        return (self.sentiment["positive"]) * (-1.15) + (self.sentiment["negative"]) * 1.5
 
     def count_word_stop(self):
         if len(self.word) == 0:
