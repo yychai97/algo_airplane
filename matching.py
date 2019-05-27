@@ -28,12 +28,14 @@ class Country:
         if len(self.sentiment) == 0:
             self.sentiment["positive"] = sum(newspaper.get_sum("positive") for newspaper in self.newspaper_list)
             self.sentiment["negative"] = sum(newspaper.get_sum("negative") for newspaper in self.newspaper_list)
+            self.sentiment["neutral"] = int(sum(newspaper.get_sum("word_dict") for newspaper in self.newspaper_list)) \
+                                        - self.sentiment["positive"] - self.sentiment["negative"]
 
         return (self.sentiment["positive"]) * (-1.15) + (self.sentiment["negative"]) * 1.5
 
     def count_word_stop(self):
         if len(self.word) == 0:
-            self.word["stop"] = sum(newspaper.get_sum("word_dict") for newspaper in self.newspaper_list)
+            self.word["stop"] = sum(newspaper.get_sum("stop_dict") for newspaper in self.newspaper_list)
             self.word["word"] = sum(newspaper.get_sum("word_dict") for newspaper in self.newspaper_list)
 
         return self.word["stop"], self.word["word"]
@@ -84,7 +86,6 @@ class Newspaper:
                 print(future)
                 results.append(res)
 
-
     def _generate_sentiment(self, word):
         """
         This is used to generate dict for word frequency.
@@ -105,10 +106,10 @@ def plot_count(country_list):
     country_stop = []
     country_word = []
 
-    for name, newspapers in country_list.items():
-        country_stop.append(sum(newspaper.get_sum("stop_dict") for newspaper in newspapers))
-        country_word.append(sum(newspaper.get_sum("word_dict") for newspaper in newspapers))
-        country_name.append(name)
+    for country in country_list.values():
+        country_stop.append(country.word["word"])
+        country_word.append(country.word["stop"])
+        country_name.append(country.name)
 
     trace1 = go.Bar(
         x=country_name,
@@ -130,10 +131,16 @@ def plot_count(country_list):
     py.plot(fig, filename='grouped-bar')
 
 
-def plot_sentiment(newspaper_list, name):
-    num = [i for i in range(len(newspaper_list))]
-    positive = [newspaper.get_sum("positive") for newspaper in newspaper_list]
-    negative = [newspaper.get_sum("negative") for newspaper in newspaper_list]
+def plot_sentiment(country_list):
+    num = []
+    positive = []
+    negative = []
+    neutral = []
+    for country in country_list.values():
+        num.append(country.name)
+        positive.append(country.sentiment["positive"])
+        negative.append(country.sentiment["negative"])
+        neutral.append(country.sentiment["neutral"])
 
     trace1 = go.Bar(
         x=num,
@@ -145,14 +152,19 @@ def plot_sentiment(newspaper_list, name):
         y=negative,
         name='Negative'
     )
+    trace3 = go.Bar(
+        x=num,
+        y=neutral,
+        name='Neutral'
+    )
 
-    data = [trace1, trace2]
+    data = [trace1, trace2, trace3]
     layout = go.Layout(
         barmode='group'
     )
 
     fig = go.Figure(data=data, layout=layout)
-    py.plot(fig, filename=name)
+    py.plot(fig, filename="country")
 
 
 def rabin_karp(pattern, file_name):
@@ -189,9 +201,13 @@ def main():
     # plot_count(country_list)
     # for name, newspaper_list in country_list.items():
     #     plot_sentiment(newspaper_list, name)
+    _ = [country.count_sentiment() for country in country_list.values()]
+    _ = [country.count_word_stop() for country in country_list.values()]
+
+    plot_sentiment(country_list)
+    plot_count(country_list)
     print(time.time() - now)
     return country_list
-
 
 
 if __name__ == "__main__":
