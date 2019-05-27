@@ -1,4 +1,6 @@
 from collections import deque, namedtuple
+
+import geopy
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import plotly
@@ -7,7 +9,8 @@ from matching import Newspaper
 import os
 import time
 import webbrowser
-
+import ssl
+import certifi
 
 
 ##DIJSKTRA ALGORITHM for calculation
@@ -137,7 +140,11 @@ class Graph:
 ##---------------------------------------------------------------------------------------------------------##
 ##OBTAINING COORDINATES FOR CITIES
 plotly.tools.set_credentials_file(username = 'yychai97', api_key = 'TsWmwKFkn3hd8MMIDVEA')
-geolocator = Nominatim(user_agent = "wia2005")
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+geopy.geocoders.options.default_ssl_context = ctx
+geolocator = Nominatim(user_agent="algo_airplane")
 
 kul = geolocator.geocode("kuala lumpur malaysia")
 nz = geolocator.geocode("new zealand")
