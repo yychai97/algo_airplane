@@ -135,6 +135,9 @@ class Graph:
         if path:
             path.appendleft(current_vertex)
         mappath = path.copy()
+        probpath = path.copy()
+        callHEREMAPS(mappath)
+        probability_routes(probpath)
         return path
 
     def list_possible_route(self, src, dest):
