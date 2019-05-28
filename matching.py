@@ -26,12 +26,14 @@ class Country:
 
     def count_sentiment(self):
         if len(self.sentiment) == 0:
+            self.total_word = int(sum(newspaper.get_sum("word_dict") for newspaper in self.newspaper_list))
             self.sentiment["positive"] = sum(newspaper.get_sum("positive") for newspaper in self.newspaper_list)
             self.sentiment["negative"] = sum(newspaper.get_sum("negative") for newspaper in self.newspaper_list)
-            self.sentiment["neutral"] = int(sum(newspaper.get_sum("word_dict") for newspaper in self.newspaper_list)) \
-                                        - self.sentiment["positive"] - self.sentiment["negative"]
+            self.sentiment["neutral"] = self.total_word - \
+                                        self.sentiment["positive"] - self.sentiment["negative"]
 
-        return (self.sentiment["positive"]) * (-1.15) + (self.sentiment["negative"]) * 1.5
+        return (self.sentiment["positive"])/self.total_word - \
+               (self.sentiment["negative"])/self.total_word
 
     def count_word_stop(self):
         if len(self.word) == 0:

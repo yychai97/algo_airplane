@@ -13,7 +13,7 @@ import ssl
 import certifi
 import copy
 
-##DIJSKTRA ALGORITHM for calculation
+# DIJSKTRA ALGORITHM for calculation
 # we'll use infinity as a default distance to nodes.
 inf = float('inf')
 Edge = namedtuple('Edge', 'start, end, cost')
@@ -155,6 +155,48 @@ class Graph:
             else:
                 self.list_recursive((name, distance), new_list, src, dest)
 
+    def get_total_distance(self, src, dest):
+        self.list_possible_route(src, dest)
+        return sum(self.get_distance_from_list(a_list) for a_list in self.possible_route)
+
+    def get_shortest_largest(self):
+        shortest = inf
+        largest = 0
+
+        for a_list in self.possible_route:
+            distance = self.get_distance_from_list(a_list)
+            if distance > largest:
+                largest = distance
+            if distance < shortest:
+                shortest = distance
+
+        return shortest, largest
+
+    def get_average_sentiment_from_a_list(self, a_list):
+        sum = 0
+        # Exclude kul
+        for name in a_list[1:]:
+            sum += self.country_list[name[0]].count_sentiment()
+        return sum / (len(a_list) - 1)
+
+    def sort(self):
+        self.largest, self.shortest = self.get_shortest_largest()
+        self.possible_route.sort(key=lambda path: self.distribution(self.largest, self.shortest, path))
+
+    @staticmethod
+    def get_distance_from_list(a_list):
+        name_list = []
+        sum = 0
+        for name, distance in a_list:
+            name_list.append(name)
+            sum += distance
+
+        print("Route: ", name_list)
+        print("Total distance:", sum)
+        return sum
+
+    def distribution(self, largest, shortest, path):
+        return (largest - self.get_distance_from_list(path)) / (largest - shortest) * 70 + (self.get_average_sentiment_from_a_list(path) + 100)/200 * 30
 
 ##---------------------------------------------------------------------------------------------------------##
 ##OBTAINING COORDINATES FOR CITIES
@@ -224,7 +266,7 @@ graph = Graph([
     ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers),
     ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers),
     ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers),
-    ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers)], country_list)
+    ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers)], country_list=country_list)
 
 
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
@@ -237,35 +279,13 @@ def callHEREMAPS(locationlist):
 
 ########################################################################################################################
 ##PROBABILITY OF RANDOM ROUTES
-def probability_routes(totaldistance_route, totaldistance_allpath, a_graph, src, dest):
-    totaldistance_allpath = get_total_distance(a_graph, src, dest)
-    probability_oneroute = (1 / totaldistance_route) / (1 / totaldistance_allpath)
-    return probability_oneroute
-
-
-def get_total_distance(a_graph, src, dest):
-    a_graph.list_possible_route(src, dest)
-    return sum(get_distance_from_list(a_list) for a_list in a_graph.possible_route)
-
-
-def get_distance_from_list(a_list):
-    name_list = []
-    sum = 0
-    for name, distance in a_list:
-        name_list.append(name)
-        sum += distance
-
-    print("Route: ", name_list)
-    print("Total distance:", sum)
-    return sum
-
 
 ########################################################################################################################
 
 
 #  print(time.time() - now)
 if __name__ == "__main__":
-    print(get_total_distance(graph, "kul", "usa"))
+    print(graph.list_possible_route("kul", "uk"))
     print("Before adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra("kul", "usa"))
     print(graph.dijkstra("kul", "ger"))
@@ -273,6 +293,8 @@ if __name__ == "__main__":
     print(graph.dijkstra("kul", "braz"))
     print(graph.dijkstra("kul", "jpn"))
     print(graph.dijkstra("kul", "aus"))
+    graph.sort()
+    print(graph.possible_route)
     print("After adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra_with_weight("kul", "usa"))
     print(graph.dijkstra_with_weight("kul", "ger"))
@@ -280,3 +302,10 @@ if __name__ == "__main__":
     print(graph.dijkstra_with_weight("kul", "braz"))
     print(graph.dijkstra_with_weight("kul", "jpn"))
     print(graph.dijkstra_with_weight("kul", "aus"))
+
+    print("Probability")
+    for a_list in graph.possible_route:
+        avg = graph.get_average_sentiment_from_a_list(a_list)
+        path = " -> ".join([name[0] for name in a_list])
+        total_dist = graph.distribution(graph.largest, graph.shortest, a_list)
+        print(path, avg, total_dist)
