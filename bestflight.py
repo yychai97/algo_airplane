@@ -103,7 +103,7 @@ class Graph:
         if path:
             path.appendleft(current_vertex)
         mappath = path.copy()
-        callHEREMAPS(mappath)
+        #callHEREMAPS(mappath)
         return path
 
     def dijkstra_with_weight(self, source, dest):
@@ -134,7 +134,7 @@ class Graph:
         if path:
             path.appendleft(current_vertex)
         mappath = path.copy()
-        callHEREMAPS(mappath)
+        #callHEREMAPS(mappath)
         return path
 
     def list_possible_route(self, src, dest):
@@ -191,7 +191,7 @@ class Graph:
         for name, distance in a_list:
             name_list.append(name)
             sum += distance
-
+        print("------------------------------------------")
         print("Route: ", name_list)
         print("Total distance:", sum)
         return sum
@@ -201,7 +201,8 @@ class Graph:
 
 ##---------------------------------------------------------------------------------------------------------##
 ##OBTAINING COORDINATES FOR CITIES
-plotly.tools.set_credentials_file(username='yychai97', api_key='TsWmwKFkn3hd8MMIDVEA')
+#plotly.tools.set_credentials_file(username='yychai97', api_key='TsWmwKFkn3hd8MMIDVEA')
+plotly.tools.set_credentials_file(username='cheeyann', api_key='6FDoEiuorFTVGkrg4LVZ')
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
@@ -269,14 +270,11 @@ def callHEREMAPS(locationlist):
 
 
 ########################################################################################################################
-##PROBABILITY OF RANDOM ROUTES
-
-########################################################################################################################
 
 
 #  print(time.time() - now)
 if __name__ == "__main__":
-    print(graph.list_possible_route("kul", "uk"))
+
     print("Before adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra("kul", "usa"))
     print(graph.dijkstra("kul", "ger"))
@@ -284,8 +282,7 @@ if __name__ == "__main__":
     print(graph.dijkstra("kul", "braz"))
     print(graph.dijkstra("kul", "jpn"))
     print(graph.dijkstra("kul", "aus"))
-    graph.sort()
-    print(graph.possible_route)
+
     print("After adding weight of political sentiment, list of destinations: ")
     print(graph.dijkstra_with_weight("kul", "usa"))
     print(graph.dijkstra_with_weight("kul", "ger"))
@@ -294,9 +291,14 @@ if __name__ == "__main__":
     print(graph.dijkstra_with_weight("kul", "jpn"))
     print(graph.dijkstra_with_weight("kul", "aus"))
 
-    print("Probability")
+    print(graph.list_possible_route("kul", "uk"))
+    graph.sort()
+    print(graph.possible_route)
+
     for a_list in graph.possible_route:
         avg = graph.get_average_sentiment_from_a_list(a_list)
         path = " -> ".join([name[0] for name in a_list])
         total_dist = graph.distribution(graph.largest, graph.shortest, a_list)
-        print(path, avg, total_dist)
+        # print(path, avg, total_dist)
+        print("Average sentiment: " + str(avg))
+        print("Probability: " + str(round(total_dist / 100, 4)))

@@ -15,6 +15,7 @@ from kivy.properties import NumericProperty, ObjectProperty, ListProperty, Alias
 import random
 from math import *
 from bestflight import graph
+from bestflight import main
 
 from kivy.core.window import Window
 Window. size = (1000, 600)
@@ -57,6 +58,34 @@ cities['Hawaii'] = 'haw'
 cities['Hong Kong'] = 'hk'
 cities['Singapore'] = 'sgp'
 #graph = Graph()
+
+print("Before adding weight of political sentiment, list of destinations: ")
+print(graph.dijkstra("kul", "usa"))
+print(graph.dijkstra("kul", "ger"))
+print(graph.dijkstra("kul", "uk"))
+print(graph.dijkstra("kul", "braz"))
+print(graph.dijkstra("kul", "jpn"))
+print(graph.dijkstra("kul", "aus"))
+
+print("After adding weight of political sentiment, list of destinations: ")
+print(graph.dijkstra_with_weight("kul", "usa"))
+print(graph.dijkstra_with_weight("kul", "ger"))
+print(graph.dijkstra_with_weight("kul", "uk"))
+print(graph.dijkstra_with_weight("kul", "braz"))
+print(graph.dijkstra_with_weight("kul", "jpn"))
+print(graph.dijkstra_with_weight("kul", "aus"))
+
+print(graph.list_possible_route("kul", "uk"))
+graph.sort()
+print(graph.possible_route)
+
+for a_list in graph.possible_route:
+    avg = graph.get_average_sentiment_from_a_list(a_list)
+    path = " -> ".join([name[0] for name in a_list])
+    total_dist = graph.distribution(graph.largest, graph.shortest, a_list)
+    # print(path, avg, total_dist)
+    print("Average sentiment: " + str(avg))
+    print("Probability: " + str(round(total_dist / 100, 4)))
 
 
 class MainScreen(BoxLayout):
