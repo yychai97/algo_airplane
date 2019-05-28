@@ -134,6 +134,7 @@ class Graph:
         if path:
             path.appendleft(current_vertex)
         mappath = path.copy()
+        callHEREMAPS(mappath)
         return path
 
     def list_possible_route(self, src, dest):
