@@ -244,29 +244,19 @@ graph = Graph([
     ("kul", "hk", geodesic(kulcoordinate, hkcoordinate).kilometers),
     ("thai", "hk", geodesic(thaicoordinate, hkcoordinate).kilometers),
     ("thai", "jpn", geodesic(thaicoordinate, jpncoordinate).kilometers),
-    ("thai", "aus", geodesic(thaicoordinate, auscoordinate).kilometers),
     ("thai", "uk", geodesic(thaicoordinate, ukcoordinate).kilometers),
+    ("thai", "ger", geodesic(thaicoordinate, gercoordinate).kilometers),
     ("sgp", "aus", geodesic(sgpcoordinate, auscoordinate).kilometers),
     ("hk", "jpn", geodesic(hkcoordinate, jpncoordinate).kilometers),
     ("jpn", "haw", geodesic(jpncoordinate, hawcoordinate).kilometers),
-    ("jpn", "nz", geodesic(jpncoordinate, nzcoordinate).kilometers),
     ("aus", "nz", geodesic(auscoordinate, nzcoordinate).kilometers),
-    ("aus", "uk", geodesic(auscoordinate, ukcoordinate).kilometers),
-    ("haw", "usa", geodesic(hawcoordinate, usacoordinate).kilometers),
     ("haw", "braz", geodesic(hawcoordinate, brazcoordinate).kilometers),
-    ("nz", "hk", geodesic(nzcoordinate, hkcoordinate).kilometers),
     ("nz", "haw", geodesic(nzcoordinate, hawcoordinate).kilometers),
-    ("nz", "braz", geodesic(nzcoordinate, brazcoordinate).kilometers),
     ("uk", "usa", geodesic(ukcoordinate, usacoordinate).kilometers),
-    ("uk", "braz", geodesic(ukcoordinate, brazcoordinate).kilometers),
     ("usa", "haw", geodesic(usacoordinate, hawcoordinate).kilometers),
     ("usa", "braz", geodesic(usacoordinate, brazcoordinate).kilometers),
-    ("usa", "ger", geodesic(usacoordinate, gercoordinate).kilometers),
     ("braz", "haw", geodesic(brazcoordinate, hawcoordinate).kilometers),
-    ("braz", "usa", geodesic(brazcoordinate, usacoordinate).kilometers),
-    ("ger", "haw", geodesic(gercoordinate, hawcoordinate).kilometers),
-    ("ger", "nz", geodesic(gercoordinate, nzcoordinate).kilometers),
-    ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers)], country_list=country_list)
+    ("ger", "uk", geodesic(gercoordinate, ukcoordinate).kilometers)], country_list)
 
 
 ##MAPPING LINES AND DISTANCE USING HERE MAPS
